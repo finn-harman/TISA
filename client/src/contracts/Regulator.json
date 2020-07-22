@@ -1,0 +1,1693 @@
+{
+  "contractName": "Regulator",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "contract Verifier",
+          "name": "_verifier",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "contract Proposal",
+          "name": "proposal",
+          "type": "address"
+        }
+      ],
+      "name": "requestProposal",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "register",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract Proposal",
+          "name": "proposal",
+          "type": "address"
+        }
+      ],
+      "name": "request",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.1+commit.e6f7d5a4\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"contract Verifier\",\"name\":\"_verifier\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"contract Proposal\",\"name\":\"proposal\",\"type\":\"address\"}],\"name\":\"requestProposal\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"register\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contract Proposal\",\"name\":\"proposal\",\"type\":\"address\"}],\"name\":\"request\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"register()\":{\"details\":\"Requests linking of address to real world identity via zero knowledge proof.   * Returns a boolean value indicating whether the operation succeeded.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"request(address)\":{\"details\":\"Requests creation of new ISA. Proposal is compared to whitelist and legal contract emails are sent if valid   * Returns a boolean value and message indicating whether the operation succeeded and why.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{},\"notice\":\"A service which regulates the creation and transfer of Income Sharing Agreements\"}},\"settings\":{\"compilationTarget\":{\"/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Regulator.sol\":\"Regulator\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Proposal.sol\":{\"keccak256\":\"0x4a9295e9d095c97415489f2d99aa94c6275e27fad5bd189f64a461eed59588bd\",\"urls\":[\"bzz-raw://a7f37d60c77e8ce8ed23f47cd3c51899dd44d8df542deb2770c506c269cdfbd4\",\"dweb:/ipfs/QmaLvGh8QmumR2ih4rLJfAJo7Zafxiu3dXw1h7gCZxXnPn\"]},\"/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Regulator.sol\":{\"keccak256\":\"0x71c2e8c8e7bb1c1d151df9153c471d5665bb136f37e0e25a31ef973ace38d9ef\",\"urls\":[\"bzz-raw://9bb40bbb5802c110dd2b4b790d196e067bf5818ef4bd54a15f804c6df6cd9f96\",\"dweb:/ipfs/QmVsyFqXZhStGHUQgGhiZ5Hsoag1e4aexmse7mNhGSg5un\"]},\"/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Verifier.sol\":{\"keccak256\":\"0xc62c3bf77c777d770814fbaef6c718bebc6b8971a13e21de918d66b9e7f3a117\",\"urls\":[\"bzz-raw://bdb698a0281aa5a8f5198c88a4007a9af1edef8a66e9873dc6c31526c156ebad\",\"dweb:/ipfs/QmNenc5D9mMS516QG9r9BLJ3vgHWBmQe8R8GyX4yRcmEYr\"]},\"openzeppelin-solidity/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"openzeppelin-solidity/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]},\"openzeppelin-solidity/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x9a9cf02622cd7a64261b10534fc3260449da25c98c9e96d1b4ae8110a20e5806\",\"urls\":[\"bzz-raw://2df142592d1dc267d9549049ee3317fa190d2f87eaa565f86ab05ec83f7ab8f5\",\"dweb:/ipfs/QmSkJtcfWo7c42KnL5hho6GFxK6HRNV91XABx1P7xDtfLV\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516108ce3803806108ce8339818101604052602081101561003357600080fd5b8101908080519060200190929190505050600061005461013960201b60201c565b9050806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508073ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a35080600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610141565b600033905090565b61077e806101506000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c80631aa3a0081461005c57806327c78c421461007e578063715018a6146101465780638da5cb5b14610150578063f2fde38b1461019a575b600080fd5b6100646101de565b604051808215151515815260200191505060405180910390f35b6100c06004803603602081101561009457600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506101e7565b604051808315151515815260200180602001828103825283818151815260200191508051906020019080838360005b8381101561010a5780820151818401526020810190506100ef565b50505050905090810190601f1680156101375780820380516001836020036101000a031916815260200191505b50935050505060405180910390f35b61014e610339565b005b6101586104c1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101dc600480360360208110156101b057600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506104ea565b005b60006001905090565b600060608273ffffffffffffffffffffffffffffffffffffffff16638a133dc86040518163ffffffff1660e01b815260040160206040518083038186803b15801561023157600080fd5b505afa158015610245573d6000803e3d6000fd5b505050506040513d602081101561025b57600080fd5b81019080805190602001909291905050506102945760006040518060600160405280602381526020016107006023913991509150610334565b7fa7e13ea85cfb2c6bce92c3ebe721bbaed610c45fae5f0c16dc6b17fccc00256d83604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a160016040518060400160405280601381526020017f50726f706f73616c207375636365737366756c00000000000000000000000000815250915091505b915091565b6103416106f7565b73ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614610402576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260208152602001807f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e657281525060200191505060405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a360008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b6104f26106f7565b73ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16146105b3576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260208152602001807f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e657281525060200191505060405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415610639576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260268152602001806107236026913960400191505060405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b60003390509056fe426f74682070617274696573206d75737420616772656520746f2070726f706f73616c4f776e61626c653a206e6577206f776e657220697320746865207a65726f2061646472657373a2646970667358221220136a865107cc09e1fa709159b7993f0a9e498a61aa55ae22935afb24de2b86c364736f6c63430006010033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100575760003560e01c80631aa3a0081461005c57806327c78c421461007e578063715018a6146101465780638da5cb5b14610150578063f2fde38b1461019a575b600080fd5b6100646101de565b604051808215151515815260200191505060405180910390f35b6100c06004803603602081101561009457600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506101e7565b604051808315151515815260200180602001828103825283818151815260200191508051906020019080838360005b8381101561010a5780820151818401526020810190506100ef565b50505050905090810190601f1680156101375780820380516001836020036101000a031916815260200191505b50935050505060405180910390f35b61014e610339565b005b6101586104c1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101dc600480360360208110156101b057600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506104ea565b005b60006001905090565b600060608273ffffffffffffffffffffffffffffffffffffffff16638a133dc86040518163ffffffff1660e01b815260040160206040518083038186803b15801561023157600080fd5b505afa158015610245573d6000803e3d6000fd5b505050506040513d602081101561025b57600080fd5b81019080805190602001909291905050506102945760006040518060600160405280602381526020016107006023913991509150610334565b7fa7e13ea85cfb2c6bce92c3ebe721bbaed610c45fae5f0c16dc6b17fccc00256d83604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a160016040518060400160405280601381526020017f50726f706f73616c207375636365737366756c00000000000000000000000000815250915091505b915091565b6103416106f7565b73ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614610402576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260208152602001807f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e657281525060200191505060405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a360008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b6104f26106f7565b73ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16146105b3576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260208152602001807f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e657281525060200191505060405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415610639576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260268152602001806107236026913960400191505060405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b60003390509056fe426f74682070617274696573206d75737420616772656520746f2070726f706f73616c4f776e61626c653a206e6577206f776e657220697320746865207a65726f2061646472657373a2646970667358221220136a865107cc09e1fa709159b7993f0a9e498a61aa55ae22935afb24de2b86c364736f6c63430006010033",
+  "sourceMap": "239:1342:4:-:0;;;349:70;8:9:-1;5:2;;;30:1;27;20:12;5:2;349:70:4;;;;;;;;;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;349:70:4;;;;;;;;;;;;;;;;865:17:7;885:12;:10;;;:12;;:::i;:::-;865:32;;916:9;907:6;;:18;;;;;;;;;;;;;;;;;;973:9;940:43;;969:1;940:43;;;;;;;;;;;;831:159;405:9:4;394:8;;:20;;;;;;;;;;;;;;;;;;349:70;239:1342;;590:104:6;643:15;677:10;670:17;;590:104;:::o;239:1342:4:-;;;;;;;",
+  "deployedSourceMap": "239:1342:4:-:0;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;239:1342:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;722:273;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1237:342;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1237:342:4;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;1237:342:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1689:145:7;;;:::i;:::-;;1066:77;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1983:240;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1983:240:7;;;;;;;;;;;;;;;;;;;:::i;:::-;;722:273:4;860:4;986;979:11;;722:273;:::o;1237:342::-;1288:4;1294:13;1320:8;:18;;;:20;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1320:20:4;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1320:20:4;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1320:20:4;;;;;;;;;;;;;;;;1315:260;;1358:5;1350:53;;;;;;;;;;;;;;;;;;;;;;;1315:260;1499:25;1515:8;1499:25;;;;;;;;;;;;;;;;;;;;;;1540:4;1532:36;;;;;;;;;;;;;;;;;;;;;1237:342;;;;:::o;1689:145:7:-;1280:12;:10;:12::i;:::-;1270:22;;:6;;;;;;;;;;;:22;;;1262:67;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1795:1:::1;1758:40;;1779:6;::::0;::::1;;;;;;;;;1758:40;;;;;;;;;;;;1825:1;1808:6:::0;::::1;:19;;;;;;;;;;;;;;;;;;1689:145::o:0;1066:77::-;1104:7;1130:6;;;;;;;;;;;1123:13;;1066:77;:::o;1983:240::-;1280:12;:10;:12::i;:::-;1270:22;;:6;;;;;;;;;;;:22;;;1262:67;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2091:1:::1;2071:22;;:8;:22;;;;2063:73;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2180:8;2151:38;;2172:6;::::0;::::1;;;;;;;;;2151:38;;;;;;;;;;;;2208:8;2199:6;::::0;:17:::1;;;;;;;;;;;;;;;;;;1983:240:::0;:::o;590:104:6:-;643:15;677:10;670:17;;590:104;:::o",
+  "source": "pragma solidity >0.4.23 <0.7.0;\n\nimport \"openzeppelin-solidity/contracts/access/Ownable.sol\";\n\nimport \"./Proposal.sol\";\nimport \"./Verifier.sol\";\n\n/// @notice A service which regulates the creation and transfer of Income Sharing Agreements\ncontract Regulator is Ownable {\n\n  Verifier private verifier;\n\n  event requestProposal(Proposal proposal);\n\n  constructor(Verifier _verifier) public {\n    verifier = _verifier;\n  }\n\n  /* bytes32[] private hashes;\n\n  function addHash(bytes32 hash) external onlyOwner {\n    hashes.push(hash);\n  } */\n\n  /**\n   * @dev Requests linking of address to real world identity via zero knowledge\n   * proof.\n   *\n   * Returns a boolean value indicating whether the operation succeeded.\n   */\n  function register(\n    /* uint[2] memory a,\n    uint[2][2] memory b,\n    uint[2] memory c,\n    uint[3] memory input */\n  ) public returns(bool)\n  {\n    // Calls zero knowledge proof to verify identity\n    /* return verifier.verifyTx(a, b, c, input); */\n    return true;\n  }\n\n  /**\n   * @dev Requests creation of new ISA. Proposal is compared to whitelist and\n   * legal contract emails are sent if valid\n   *\n   * Returns a boolean value and message indicating whether the operation\n   * succeeded and why.\n   */\n  function request(Proposal proposal) public returns(bool, string memory) {\n    if (!proposal.bothAgree()) {\n      return (false, \"Both parties must agree to proposal\");\n    } else {\n      // Access off-chain database and check validity of ISA proposal\n      emit requestProposal(proposal);\n      return (true, \"Proposal successful\");\n    }\n  }\n}\n",
+  "sourcePath": "/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Regulator.sol",
+  "ast": {
+    "absolutePath": "/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Regulator.sol",
+    "exportedSymbols": {
+      "Regulator": [
+        554
+      ]
+    },
+    "id": 555,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 495,
+        "literals": [
+          "solidity",
+          ">",
+          "0.4",
+          ".23",
+          "<",
+          "0.7",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:31:4"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/access/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/access/Ownable.sol",
+        "id": 496,
+        "nodeType": "ImportDirective",
+        "scope": 555,
+        "sourceUnit": 3249,
+        "src": "33:60:4",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Proposal.sol",
+        "file": "./Proposal.sol",
+        "id": 497,
+        "nodeType": "ImportDirective",
+        "scope": 555,
+        "sourceUnit": 494,
+        "src": "95:24:4",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Verifier.sol",
+        "file": "./Verifier.sol",
+        "id": 498,
+        "nodeType": "ImportDirective",
+        "scope": 555,
+        "sourceUnit": 3123,
+        "src": "120:24:4",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 499,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3248,
+              "src": "261:7:4",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$3248",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 500,
+            "nodeType": "InheritanceSpecifier",
+            "src": "261:7:4"
+          }
+        ],
+        "contractDependencies": [
+          3145,
+          3248
+        ],
+        "contractKind": "contract",
+        "documentation": "@notice A service which regulates the creation and transfer of Income Sharing Agreements",
+        "fullyImplemented": true,
+        "id": 554,
+        "linearizedBaseContracts": [
+          554,
+          3248,
+          3145
+        ],
+        "name": "Regulator",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 502,
+            "name": "verifier",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 554,
+            "src": "274:25:4",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_Verifier_$3122",
+              "typeString": "contract Verifier"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 501,
+              "name": "Verifier",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3122,
+              "src": "274:8:4",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Verifier_$3122",
+                "typeString": "contract Verifier"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 506,
+            "name": "requestProposal",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 505,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 504,
+                  "indexed": false,
+                  "name": "proposal",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 506,
+                  "src": "326:17:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_Proposal_$493",
+                    "typeString": "contract Proposal"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 503,
+                    "name": "Proposal",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 493,
+                    "src": "326:8:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Proposal_$493",
+                      "typeString": "contract Proposal"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "325:19:4"
+            },
+            "src": "304:41:4"
+          },
+          {
+            "body": {
+              "id": 515,
+              "nodeType": "Block",
+              "src": "388:31:4",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 513,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 511,
+                      "name": "verifier",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 502,
+                      "src": "394:8:4",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_Verifier_$3122",
+                        "typeString": "contract Verifier"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 512,
+                      "name": "_verifier",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 508,
+                      "src": "405:9:4",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_Verifier_$3122",
+                        "typeString": "contract Verifier"
+                      }
+                    },
+                    "src": "394:20:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Verifier_$3122",
+                      "typeString": "contract Verifier"
+                    }
+                  },
+                  "id": 514,
+                  "nodeType": "ExpressionStatement",
+                  "src": "394:20:4"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 516,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 509,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 508,
+                  "name": "_verifier",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 516,
+                  "src": "361:18:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_Verifier_$3122",
+                    "typeString": "contract Verifier"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 507,
+                    "name": "Verifier",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 3122,
+                    "src": "361:8:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Verifier_$3122",
+                      "typeString": "contract Verifier"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "360:20:4"
+            },
+            "returnParameters": {
+              "id": 510,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "388:0:4"
+            },
+            "scope": 554,
+            "src": "349:70:4",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 523,
+              "nodeType": "Block",
+              "src": "868:127:4",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "74727565",
+                    "id": 521,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "986:4:4",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 520,
+                  "id": 522,
+                  "nodeType": "Return",
+                  "src": "979:11:4"
+                }
+              ]
+            },
+            "documentation": "@dev Requests linking of address to real world identity via zero knowledge\nproof.\n   * Returns a boolean value indicating whether the operation succeeded.",
+            "functionSelector": "1aa3a008",
+            "id": 524,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "register",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 517,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "739:105:4"
+            },
+            "returnParameters": {
+              "id": 520,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 519,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 524,
+                  "src": "860:4:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 518,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "860:4:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "859:6:4"
+            },
+            "scope": 554,
+            "src": "722:273:4",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 552,
+              "nodeType": "Block",
+              "src": "1309:270:4",
+              "statements": [
+                {
+                  "condition": {
+                    "argumentTypes": null,
+                    "id": 536,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "UnaryOperation",
+                    "operator": "!",
+                    "prefix": true,
+                    "src": "1319:21:4",
+                    "subExpression": {
+                      "argumentTypes": null,
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 533,
+                          "name": "proposal",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 526,
+                          "src": "1320:8:4",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_contract$_Proposal_$493",
+                            "typeString": "contract Proposal"
+                          }
+                        },
+                        "id": 534,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "bothAgree",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 333,
+                        "src": "1320:18:4",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_external_view$__$returns$_t_bool_$",
+                          "typeString": "function () view external returns (bool)"
+                        }
+                      },
+                      "id": 535,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1320:20:4",
+                      "tryCall": false,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "falseBody": {
+                    "id": 550,
+                    "nodeType": "Block",
+                    "src": "1416:159:4",
+                    "statements": [
+                      {
+                        "eventCall": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 543,
+                              "name": "proposal",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 526,
+                              "src": "1515:8:4",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_Proposal_$493",
+                                "typeString": "contract Proposal"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_Proposal_$493",
+                                "typeString": "contract Proposal"
+                              }
+                            ],
+                            "id": 542,
+                            "name": "requestProposal",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 506,
+                            "src": "1499:15:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_event_nonpayable$_t_contract$_Proposal_$493_$returns$__$",
+                              "typeString": "function (contract Proposal)"
+                            }
+                          },
+                          "id": 544,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1499:25:4",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 545,
+                        "nodeType": "EmitStatement",
+                        "src": "1494:30:4"
+                      },
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "components": [
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "74727565",
+                              "id": 546,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "bool",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1540:4:4",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_bool",
+                                "typeString": "bool"
+                              },
+                              "value": "true"
+                            },
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "50726f706f73616c207375636365737366756c",
+                              "id": 547,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "string",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1546:21:4",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_stringliteral_e538b145d3f907d7f6c001efc47c2e295d304e81252b274a5144fd2df9f7cb73",
+                                "typeString": "literal_string \"Proposal successful\""
+                              },
+                              "value": "Proposal successful"
+                            }
+                          ],
+                          "id": 548,
+                          "isConstant": false,
+                          "isInlineArray": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "TupleExpression",
+                          "src": "1539:29:4",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$_t_bool_$_t_stringliteral_e538b145d3f907d7f6c001efc47c2e295d304e81252b274a5144fd2df9f7cb73_$",
+                            "typeString": "tuple(bool,literal_string \"Proposal successful\")"
+                          }
+                        },
+                        "functionReturnParameters": 532,
+                        "id": 549,
+                        "nodeType": "Return",
+                        "src": "1532:36:4"
+                      }
+                    ]
+                  },
+                  "id": 551,
+                  "nodeType": "IfStatement",
+                  "src": "1315:260:4",
+                  "trueBody": {
+                    "id": 541,
+                    "nodeType": "Block",
+                    "src": "1342:68:4",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "components": [
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "66616c7365",
+                              "id": 537,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "bool",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1358:5:4",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_bool",
+                                "typeString": "bool"
+                              },
+                              "value": "false"
+                            },
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "426f74682070617274696573206d75737420616772656520746f2070726f706f73616c",
+                              "id": 538,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "string",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1365:37:4",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_stringliteral_09ca7baf9315f7f28c1faa4f9c9c06a537d896fcb77ce6bc04c76aa64bbd8957",
+                                "typeString": "literal_string \"Both parties must agree to proposal\""
+                              },
+                              "value": "Both parties must agree to proposal"
+                            }
+                          ],
+                          "id": 539,
+                          "isConstant": false,
+                          "isInlineArray": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "TupleExpression",
+                          "src": "1357:46:4",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$_t_bool_$_t_stringliteral_09ca7baf9315f7f28c1faa4f9c9c06a537d896fcb77ce6bc04c76aa64bbd8957_$",
+                            "typeString": "tuple(bool,literal_string \"Both parties must agree to proposal\")"
+                          }
+                        },
+                        "functionReturnParameters": 532,
+                        "id": 540,
+                        "nodeType": "Return",
+                        "src": "1350:53:4"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "documentation": "@dev Requests creation of new ISA. Proposal is compared to whitelist and\nlegal contract emails are sent if valid\n   * Returns a boolean value and message indicating whether the operation\nsucceeded and why.",
+            "functionSelector": "27c78c42",
+            "id": 553,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "request",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 527,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 526,
+                  "name": "proposal",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 553,
+                  "src": "1254:17:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_Proposal_$493",
+                    "typeString": "contract Proposal"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 525,
+                    "name": "Proposal",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 493,
+                    "src": "1254:8:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Proposal_$493",
+                      "typeString": "contract Proposal"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1253:19:4"
+            },
+            "returnParameters": {
+              "id": 532,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 529,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 553,
+                  "src": "1288:4:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 528,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1288:4:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 531,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 553,
+                  "src": "1294:13:4",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 530,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1294:6:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1287:21:4"
+            },
+            "scope": 554,
+            "src": "1237:342:4",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 555,
+        "src": "239:1342:4"
+      }
+    ],
+    "src": "0:1582:4"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Regulator.sol",
+    "exportedSymbols": {
+      "Regulator": [
+        554
+      ]
+    },
+    "id": 555,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 495,
+        "literals": [
+          "solidity",
+          ">",
+          "0.4",
+          ".23",
+          "<",
+          "0.7",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:31:4"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/access/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/access/Ownable.sol",
+        "id": 496,
+        "nodeType": "ImportDirective",
+        "scope": 555,
+        "sourceUnit": 3249,
+        "src": "33:60:4",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Proposal.sol",
+        "file": "./Proposal.sol",
+        "id": 497,
+        "nodeType": "ImportDirective",
+        "scope": 555,
+        "sourceUnit": 494,
+        "src": "95:24:4",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/FinnHarman/Google Drive/Computing Science/Individual Project/Code/ISA/contracts/Verifier.sol",
+        "file": "./Verifier.sol",
+        "id": 498,
+        "nodeType": "ImportDirective",
+        "scope": 555,
+        "sourceUnit": 3123,
+        "src": "120:24:4",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 499,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3248,
+              "src": "261:7:4",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$3248",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 500,
+            "nodeType": "InheritanceSpecifier",
+            "src": "261:7:4"
+          }
+        ],
+        "contractDependencies": [
+          3145,
+          3248
+        ],
+        "contractKind": "contract",
+        "documentation": "@notice A service which regulates the creation and transfer of Income Sharing Agreements",
+        "fullyImplemented": true,
+        "id": 554,
+        "linearizedBaseContracts": [
+          554,
+          3248,
+          3145
+        ],
+        "name": "Regulator",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 502,
+            "name": "verifier",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 554,
+            "src": "274:25:4",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_Verifier_$3122",
+              "typeString": "contract Verifier"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 501,
+              "name": "Verifier",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3122,
+              "src": "274:8:4",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Verifier_$3122",
+                "typeString": "contract Verifier"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 506,
+            "name": "requestProposal",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 505,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 504,
+                  "indexed": false,
+                  "name": "proposal",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 506,
+                  "src": "326:17:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_Proposal_$493",
+                    "typeString": "contract Proposal"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 503,
+                    "name": "Proposal",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 493,
+                    "src": "326:8:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Proposal_$493",
+                      "typeString": "contract Proposal"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "325:19:4"
+            },
+            "src": "304:41:4"
+          },
+          {
+            "body": {
+              "id": 515,
+              "nodeType": "Block",
+              "src": "388:31:4",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 513,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 511,
+                      "name": "verifier",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 502,
+                      "src": "394:8:4",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_Verifier_$3122",
+                        "typeString": "contract Verifier"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 512,
+                      "name": "_verifier",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 508,
+                      "src": "405:9:4",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_Verifier_$3122",
+                        "typeString": "contract Verifier"
+                      }
+                    },
+                    "src": "394:20:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Verifier_$3122",
+                      "typeString": "contract Verifier"
+                    }
+                  },
+                  "id": 514,
+                  "nodeType": "ExpressionStatement",
+                  "src": "394:20:4"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 516,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 509,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 508,
+                  "name": "_verifier",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 516,
+                  "src": "361:18:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_Verifier_$3122",
+                    "typeString": "contract Verifier"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 507,
+                    "name": "Verifier",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 3122,
+                    "src": "361:8:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Verifier_$3122",
+                      "typeString": "contract Verifier"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "360:20:4"
+            },
+            "returnParameters": {
+              "id": 510,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "388:0:4"
+            },
+            "scope": 554,
+            "src": "349:70:4",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 523,
+              "nodeType": "Block",
+              "src": "868:127:4",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "74727565",
+                    "id": 521,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "986:4:4",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 520,
+                  "id": 522,
+                  "nodeType": "Return",
+                  "src": "979:11:4"
+                }
+              ]
+            },
+            "documentation": "@dev Requests linking of address to real world identity via zero knowledge\nproof.\n   * Returns a boolean value indicating whether the operation succeeded.",
+            "functionSelector": "1aa3a008",
+            "id": 524,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "register",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 517,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "739:105:4"
+            },
+            "returnParameters": {
+              "id": 520,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 519,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 524,
+                  "src": "860:4:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 518,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "860:4:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "859:6:4"
+            },
+            "scope": 554,
+            "src": "722:273:4",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 552,
+              "nodeType": "Block",
+              "src": "1309:270:4",
+              "statements": [
+                {
+                  "condition": {
+                    "argumentTypes": null,
+                    "id": 536,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "UnaryOperation",
+                    "operator": "!",
+                    "prefix": true,
+                    "src": "1319:21:4",
+                    "subExpression": {
+                      "argumentTypes": null,
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 533,
+                          "name": "proposal",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 526,
+                          "src": "1320:8:4",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_contract$_Proposal_$493",
+                            "typeString": "contract Proposal"
+                          }
+                        },
+                        "id": 534,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "bothAgree",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 333,
+                        "src": "1320:18:4",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_external_view$__$returns$_t_bool_$",
+                          "typeString": "function () view external returns (bool)"
+                        }
+                      },
+                      "id": 535,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1320:20:4",
+                      "tryCall": false,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "falseBody": {
+                    "id": 550,
+                    "nodeType": "Block",
+                    "src": "1416:159:4",
+                    "statements": [
+                      {
+                        "eventCall": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 543,
+                              "name": "proposal",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 526,
+                              "src": "1515:8:4",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_Proposal_$493",
+                                "typeString": "contract Proposal"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_Proposal_$493",
+                                "typeString": "contract Proposal"
+                              }
+                            ],
+                            "id": 542,
+                            "name": "requestProposal",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 506,
+                            "src": "1499:15:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_event_nonpayable$_t_contract$_Proposal_$493_$returns$__$",
+                              "typeString": "function (contract Proposal)"
+                            }
+                          },
+                          "id": 544,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1499:25:4",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 545,
+                        "nodeType": "EmitStatement",
+                        "src": "1494:30:4"
+                      },
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "components": [
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "74727565",
+                              "id": 546,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "bool",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1540:4:4",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_bool",
+                                "typeString": "bool"
+                              },
+                              "value": "true"
+                            },
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "50726f706f73616c207375636365737366756c",
+                              "id": 547,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "string",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1546:21:4",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_stringliteral_e538b145d3f907d7f6c001efc47c2e295d304e81252b274a5144fd2df9f7cb73",
+                                "typeString": "literal_string \"Proposal successful\""
+                              },
+                              "value": "Proposal successful"
+                            }
+                          ],
+                          "id": 548,
+                          "isConstant": false,
+                          "isInlineArray": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "TupleExpression",
+                          "src": "1539:29:4",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$_t_bool_$_t_stringliteral_e538b145d3f907d7f6c001efc47c2e295d304e81252b274a5144fd2df9f7cb73_$",
+                            "typeString": "tuple(bool,literal_string \"Proposal successful\")"
+                          }
+                        },
+                        "functionReturnParameters": 532,
+                        "id": 549,
+                        "nodeType": "Return",
+                        "src": "1532:36:4"
+                      }
+                    ]
+                  },
+                  "id": 551,
+                  "nodeType": "IfStatement",
+                  "src": "1315:260:4",
+                  "trueBody": {
+                    "id": 541,
+                    "nodeType": "Block",
+                    "src": "1342:68:4",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "components": [
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "66616c7365",
+                              "id": 537,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "bool",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1358:5:4",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_bool",
+                                "typeString": "bool"
+                              },
+                              "value": "false"
+                            },
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "426f74682070617274696573206d75737420616772656520746f2070726f706f73616c",
+                              "id": 538,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "string",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1365:37:4",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_stringliteral_09ca7baf9315f7f28c1faa4f9c9c06a537d896fcb77ce6bc04c76aa64bbd8957",
+                                "typeString": "literal_string \"Both parties must agree to proposal\""
+                              },
+                              "value": "Both parties must agree to proposal"
+                            }
+                          ],
+                          "id": 539,
+                          "isConstant": false,
+                          "isInlineArray": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "TupleExpression",
+                          "src": "1357:46:4",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$_t_bool_$_t_stringliteral_09ca7baf9315f7f28c1faa4f9c9c06a537d896fcb77ce6bc04c76aa64bbd8957_$",
+                            "typeString": "tuple(bool,literal_string \"Both parties must agree to proposal\")"
+                          }
+                        },
+                        "functionReturnParameters": 532,
+                        "id": 540,
+                        "nodeType": "Return",
+                        "src": "1350:53:4"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "documentation": "@dev Requests creation of new ISA. Proposal is compared to whitelist and\nlegal contract emails are sent if valid\n   * Returns a boolean value and message indicating whether the operation\nsucceeded and why.",
+            "functionSelector": "27c78c42",
+            "id": 553,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "request",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 527,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 526,
+                  "name": "proposal",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 553,
+                  "src": "1254:17:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_Proposal_$493",
+                    "typeString": "contract Proposal"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 525,
+                    "name": "Proposal",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 493,
+                    "src": "1254:8:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Proposal_$493",
+                      "typeString": "contract Proposal"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1253:19:4"
+            },
+            "returnParameters": {
+              "id": 532,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 529,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 553,
+                  "src": "1288:4:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 528,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1288:4:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 531,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 553,
+                  "src": "1294:13:4",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 530,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1294:6:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1287:21:4"
+            },
+            "scope": 554,
+            "src": "1237:342:4",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 555,
+        "src": "239:1342:4"
+      }
+    ],
+    "src": "0:1582:4"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.1+commit.e6f7d5a4.Emscripten.clang"
+  },
+  "networks": {
+    "5777": {
+      "events": {
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        },
+        "0xa7e13ea85cfb2c6bce92c3ebe721bbaed610c45fae5f0c16dc6b17fccc00256d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "contract Proposal",
+              "name": "proposal",
+              "type": "address"
+            }
+          ],
+          "name": "requestProposal",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xBF7B8F9D5d89e5790cE13ed8060BBe396c624ee4",
+      "transactionHash": "0x0c3aaa7c86f12c1d7661a2e7b2f079e36548cec848a9cb5be1f5c85f87635e49"
+    }
+  },
+  "schemaVersion": "3.2.0",
+  "updatedAt": "2020-07-16T14:51:57.905Z",
+  "networkType": "ethereum",
+  "devdoc": {
+    "methods": {
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "register()": {
+        "details": "Requests linking of address to real world identity via zero knowledge proof.   * Returns a boolean value indicating whether the operation succeeded."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "request(address)": {
+        "details": "Requests creation of new ISA. Proposal is compared to whitelist and legal contract emails are sent if valid   * Returns a boolean value and message indicating whether the operation succeeded and why."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    }
+  },
+  "userdoc": {
+    "methods": {},
+    "notice": "A service which regulates the creation and transfer of Income Sharing Agreements"
+  }
+}
