@@ -4,18 +4,16 @@ var ISAFactory = artifacts.require("./ISAFactory.sol");
 
 module.exports = async (deployer, network, accounts) => {
     console.log('Deploying Verifier, Regulator and ISAFactory on ganache')
-    const reg = accounts[0]
 
-    console.log("test is " + test)
-    await deployer.deploy(Verifier, { from: reg })
+    await deployer.deploy(Verifier)
     const verifier = await Verifier.deployed()
-    console.log("Verifier deployed by " + reg + " at address " + verifier.address)
+    console.log("Verifier deployed at address " + verifier.address)
 
-    await deployer.deploy(Regulator, verifier.address, { from: reg })
+    await deployer.deploy(Regulator, verifier.address)
     const regulator = await Regulator.deployed()
-    console.log("Regulator deployed by " + reg + " at address " + regulator.address)
+    console.log("Regulator deployed at address " + regulator.address)
 
-    await deployer.deploy(ISAFactory, regulator.address, { from: reg })
+    await deployer.deploy(ISAFactory, regulator.address)
     const isaFactory = await ISAFactory.deployed()
-    console.log("ISAFactory deployed by " + reg + " at address " + isaFactory.address)
+    console.log("ISAFactory deployed at address " + isaFactory.address)
 };

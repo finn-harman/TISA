@@ -23,8 +23,10 @@ import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 // core components/views for Admin layout
-import Auctions from "views/Auctions/Auctions.js";
+import UserDashboard from "views/UserDashboard/UserDashboard.js";
 import Register from "views/Register/Register.js";
+import NewProposal from "views/NewProposal/NewProposal.js"
+import RegulatorDashboard from "views/RegulatorDashboard/RegulatorDashboard.js"
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
@@ -35,11 +37,11 @@ import NotificationsPage from "views/Notifications/Notifications.js";
 
 const dashboardRoutes = [
   {
-    path: "/Auctions",
-    name: "Auctions",
+    path: "/UserDashboard",
+    name: "User Dashboard",
     rtlName: "لوحة القيادة",
     icon: Dashboard,
-    component: Auctions,
+    component: UserDashboard,
     layout: "/admin"
   },
   {
@@ -48,6 +50,22 @@ const dashboardRoutes = [
     rtlName: "لوحة القيادة",
     icon: Person,
     component: Register,
+    layout: "/admin"
+  },
+  {
+    path: "/NewProposal",
+    name: "New Proposal",
+    rtlName: "لوحة القيادة",
+    icon: Person,
+    component: NewProposal,
+    layout: "/admin"
+  },
+  {
+    path: "/RegulatorDashboard",
+    name: "Regulator Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: Dashboard,
+    component: RegulatorDashboard,
     layout: "/admin"
   },
   {

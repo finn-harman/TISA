@@ -14,9 +14,12 @@ import CardFooter from "components/Card/CardFooter.js";
 
 //connect to blockchain
 import getWeb3 from "../../utils/getWeb3";
-import ISAFactoryContract from "../../contracts/ISAFactory.json";
+import Web3 from "web3";
+
+import RegulatorContract from "../../contracts/Regulator.json";
 import { sha256compression } from '../../utils/hash.js'
-import { initialize } from 'zokrates-js';
+import { getData, register } from '../../utils/regulatorServerInterface'
+import { convertAndPad } from '../../utils/string-helpers'
 
 const styles = {
   cardCategoryWhite: {
@@ -45,24 +48,27 @@ export default function Register() {
   const [ web3, setWeb3 ] = useState(null);
   const [ contract, setContract] = useState(null);
   const [ accounts, setAccounts ] = useState(null);
+  const [ currentAccount, setCurrentAccount ] = useState(null);
 
   useEffect(() => {
-    console.log("connecting to ISAFactory contact")
+    console.log("connecting to Regulator contract")
     const init = async() => {
       try {
-        const web3 = await getWeb3();
+        const web3 = new Web3(window.ethereum);
+        console.log("connected to web3 instance")
         const networkId = await web3.eth.net.getId();
-        const deployedNetwork = ISAFactoryContract.networks[networkId];
+        const deployedNetwork = RegulatorContract.networks[networkId];
         const accounts = await web3.eth.getAccounts();
         const instance = new web3.eth.Contract(
-          ISAFactoryContract.abi,
+          RegulatorContract.abi,
           deployedNetwork && deployedNetwork.address,
         );
+        console.log("connected to verifier contract")
 
         setWeb3(web3)
         setContract(instance)
         setAccounts(accounts)
-
+        setCurrentAccount(accounts[0])
       } catch(error) {
         alert(
           `Failed to load web3, accounts, or contract. Check console for details.`,
@@ -84,18 +90,6 @@ export default function Register() {
   // const [ nationalInsurance, setNationalInsurance ] = useState(null)
   // const [ email, setEmail ] = useState(null)
 
-  const convertAndPad = (input) => {
-    var output = ""
-
-    for (var i = 0; i < input.length; i++) {
-        var bin = (input[i].charCodeAt(0).toString(2)).padStart(8,"0")
-        output += bin
-    }
-
-    output = output.padStart(512, "0");
-    return output;
-  }
-
   const registerDetails = async () => {
     if (!name || !postCode || !nationalInsurance || !email) {
       alert("Error: All fields must be completed");
@@ -105,60 +99,18 @@ export default function Register() {
       console.log("National Insurance Number: " + nationalInsurance)
       console.log("Email: " + email)
 
-      console.log("Constructing hash input...")
-      var personalDetails = name + postCode + nationalInsurance + email
-      console.log("Personal Details: " + personalDetails)
-      personalDetails = personalDetails.replace(/\s/g, '')
-      console.log("Personal Details after replace: " + personalDetails)
-      personalDetails = personalDetails.toLowerCase()
-      console.log("Personal Details after lower case: " + personalDetails)
-      const personalDetailsBinary = convertAndPad(personalDetails)
-      console.log("Personal Details after convert and pad: " + personalDetailsBinary)
-
-      const personalDetailsBinarySplit = personalDetailsBinary.match(/.{1,128}/g);
-      console.log("Personal Details after split into 4: " + personalDetailsBinarySplit)
-
-      const hash = sha256compression(personalDetailsBinary)
+      const hash = convertAndPad(name, postCode, nationalInsurance, email)
       console.log("Personal Details hash: " + hash)
 
       // Generate witness based on hash using zokrates
-      const program = `
-      import "hashes/sha256/512bitPacked" as sha256packed
-
-      def main(private field a, private field b, private field c, private field d) -> (field):
-          h = sha256packed([a, b, c, d])
-          h[0] == 263561599766550617289250058199814760685
-          return 1
-      `;
-
-      const start = new Date().getTime()
-      console.log("start: " + start)
-
-      const provider = await initialize()
-
-      console.log(provider);
-      const artifacts = provider.compile(program, "main", null);
-      console.log("Running setup");
-      const keypair = provider.setup(artifacts.program);
-      console.log(keypair.pk)
-
-      const end1 = new Date().getTime()
-      console.log("delta1: " + (end1-start))
-      const result = provider.computeWitness(artifacts, ["0", "0", "0", "5"]);
-
-      console.log("Output: " + result.output + "\n"); // output: ["1"]
-
-
-
-      console.log("Generating proof");
-      const proof = provider.generateProof(artifacts.program, result.witness, keypair.pk);
-      console.log(proof);
-
-      const end2 = new Date().getTime()
-      console.log("end: " + end2)
-      console.log("delta2: " + (end2-end1))
+      // Manipulate return value
       // Call verifyTx of Verifier.sol to verify hash
+      const verifiedEvent = await contract.methods.register(true).send( {from: currentAccount} )
       // If successful, check hash against database and add address to database
+      console.log(verifiedEvent)
+      // if (verifiedEvent.events.Verified.event == "Verified") {
+      //
+      // }
     }
   }
 
@@ -169,7 +121,7 @@ export default function Register() {
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Register</h4>
-              <p className={classes.cardCategoryWhite}>Insert your personal details to connect your real life identity to your Ethereum address</p>
+              <p className={classes.cardCategoryWhite}>Enter your personal details to connect your real life identity to your Ethereum address</p>
             </CardHeader>
             <CardBody>
               <GridContainer>

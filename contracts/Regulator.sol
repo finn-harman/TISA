@@ -9,6 +9,7 @@ import "./Verifier.sol";
 contract Regulator is Ownable {
 
   Verifier private verifier;
+  mapping(bytes32 => bool) validIdentites;
 
   event requestProposal(Proposal proposal);
 
@@ -16,11 +17,14 @@ contract Regulator is Ownable {
     verifier = _verifier;
   }
 
-  /* bytes32[] private hashes;
+  /*
+  * @dev allows the owner of the contract to add an eligible consumer detail hash
+  */
+  function addIdentity(bytes32 hash) public onlyOwner {
+    require(!validIdentites[hash]);
+    validIdentites[hash] = true;
+  }
 
-  function addHash(bytes32 hash) external onlyOwner {
-    hashes.push(hash);
-  } */
 
   /**
    * @dev Requests linking of address to real world identity via zero knowledge
@@ -29,15 +33,11 @@ contract Regulator is Ownable {
    * Returns a boolean value indicating whether the operation succeeded.
    */
   function register(
-    /* uint[2] memory a,
-    uint[2][2] memory b,
-    uint[2] memory c,
-    uint[3] memory input */
-  ) public returns(bool)
+    bool success
+  ) external returns(bool)
   {
     // Calls zero knowledge proof to verify identity
-    /* return verifier.verifyTx(a, b, c, input); */
-    return true;
+    return verifier.verifyTx(success);
   }
 
   /**
