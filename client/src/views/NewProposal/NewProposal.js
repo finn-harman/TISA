@@ -42,7 +42,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function Register() {
+export default function NewProposal() {
   const classes = useStyles();
 
   const [ web3, setWeb3 ] = useState(null);
@@ -80,33 +80,25 @@ export default function Register() {
     init();
   }, []);
 
-  const [ name, setName ] = useState("Joe Bloggs")
-  const [ postCode, setPostCode ] = useState("E1 0WL")
-  const [ nationalInsurance, setNationalInsurance ] = useState("12345678")
-  const [ email, setEmail ] = useState("joebloggs@gmail.com")
-
-  // const [ name, setName ] = useState(null)
-  // const [ postCode, setPostCode ] = useState(null)
-  // const [ nationalInsurance, setNationalInsurance ] = useState(null)
-  // const [ email, setEmail ] = useState(null)
+  const [ lenderAddress, setLenderAddress ] = useState("0xd0Cf03935c217B9C192e3cD12885c136cfC82e95")
+  const [ borrowerAddress, setBorrowerAddress ] = useState("0x1d11E4335012202E17adf951155F78dEEBBFDCa4")
+  const [ isaAmount, setIsaAmount ] = useState(100000)
+  const [ incomePercentage, setIncomePercentage ] = useState(30)
+  const [ timePeriod, setTimePeriod ] = useState(18)
+  const [ buyoutAmount, setBuyoutAmount ] = useState(30000)
+  const [ minimumIncome, setMinimumIncome ] = useState(50000)
+  const [ paymentCap, setPaymentCap ] = useState(30000)
 
   const registerDetails = async () => {
-    if (!name || !postCode || !nationalInsurance || !email) {
+    if (!lenderAddress || !borrowerAddress || !isaAmount || !incomePercentage || !timePeriod || !buyoutAmount || !minimumIncome || !paymentCap) {
       alert("Error: All fields must be completed");
     } else {
-      console.log("Name: " + name)
-      console.log("Post Code: " + postCode)
-      console.log("National Insurance Number: " + nationalInsurance)
-      console.log("Email: " + email)
-
-      const hash = convertAndPad(name, postCode, nationalInsurance, email)
-      console.log("Personal Details hash: " + hash)
-
-      // Generate witness based on hash using zokrates
-      // Manipulate return value
-      // Call verifyTx of Verifier.sol to verify hash
-      const success = await contract.methods.verifyTx(true).send( {from: currentAccount} )
-      console.log(success)
+      const proposal = await contract.methods.newProposal(lenderAddress, borrowerAddress,
+        isaAmount, incomePercentage, timePeriod, buyoutAmount, minimumIncome,
+        paymentCap
+      ).send( {from: currentAccount} )
+      console.log(proposal)
+      // console.log(success)
       // If successful, check hash against database and add address to database
 
     }
@@ -117,18 +109,18 @@ export default function Register() {
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-            <CardHeader color="primary">
+            <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>New Proposal</h4>
               <p className={classes.cardCategoryWhite}>Enter the details of a new ISA proposal</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => setLenderAddress(e.target.value)}
                   >
                   <CustomInput
-                    labelText="Full name"
-                    id="full-name"
+                    labelText="Lender Address"
+                    id="lender-address"
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -137,11 +129,11 @@ export default function Register() {
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setPostCode(e.target.value)}
+                  onChange={(e) => setBorrowerAddress(e.target.value)}
                   >
                   <CustomInput
-                    labelText="Post Code"
-                    id="post-code"
+                    labelText="Borrower Address"
+                    id="borrower-address"
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -150,11 +142,11 @@ export default function Register() {
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setNationalInsurance(e.target.value)}
+                  onChange={(e) => setIsaAmount(parseInt(e.target.value, 10))}
                   >
                   <CustomInput
-                    labelText="National Insurance Number"
-                    id="national-insurance-number"
+                    labelText="ISA Amount ($)"
+                    id="isa-amount"
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -163,11 +155,63 @@ export default function Register() {
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setIncomePercentage(parseInt(e.target.value, 10))}
                   >
                   <CustomInput
-                    labelText="Email Address"
-                    id="email-address"
+                    labelText="Income Percentage"
+                    id="income-percentage"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={6}
+                  onChange={(e) => setTimePeriod(parseInt(e.target.value,10))}
+                  >
+                  <CustomInput
+                    labelText="ISA Time Period (Months)"
+                    id="isa-time-period"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={6}
+                  onChange={(e) => setBuyoutAmount(parseInt(e.target.value,10))}
+                  >
+                  <CustomInput
+                    labelText="Buyout Multiplier"
+                    id="buyout-multiplier"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={6}
+                  onChange={(e) => setMinimumIncome(parseInt(e.target.value,10))}
+                  >
+                  <CustomInput
+                    labelText="Minimum Income ($)"
+                    id="minimum-income"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={6}
+                  onChange={(e) => setPaymentCap(parseInt(e.target.value,10))}
+                  >
+                  <CustomInput
+                    labelText="Payment Cap ($)"
+                    id="payment-cap"
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -176,7 +220,7 @@ export default function Register() {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button onClick={registerDetails} color="primary">Register Details</Button>
+              <Button onClick={registerDetails} color="info">Create Proposal</Button>
             </CardFooter>
           </Card>
         </GridItem>

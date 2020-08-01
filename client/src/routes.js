@@ -26,7 +26,6 @@ import Notifications from "@material-ui/icons/Notifications";
 import UserDashboard from "views/UserDashboard/UserDashboard.js";
 import Register from "views/Register/Register.js";
 import NewProposal from "views/NewProposal/NewProposal.js"
-import RegulatorDashboard from "views/RegulatorDashboard/RegulatorDashboard.js"
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
@@ -58,14 +57,6 @@ const dashboardRoutes = [
     rtlName: "لوحة القيادة",
     icon: Person,
     component: NewProposal,
-    layout: "/admin"
-  },
-  {
-    path: "/RegulatorDashboard",
-    name: "Regulator Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: Dashboard,
-    component: RegulatorDashboard,
     layout: "/admin"
   },
   {

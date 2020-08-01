@@ -10,10 +10,11 @@ import "./Proposal.sol";
 /// @notice An ISA factory providing the interface for creation of new ISAs
 contract ISAFactory is Ownable {
 
-  Regulator private _regulator;
+  Regulator private regulator;
+  Proposal[] private proposals;
 
-  constructor(Regulator regulator) public {
-    _regulator = regulator;
+  constructor(Regulator _regulator) public {
+    regulator = _regulator;
   }
 
   /**
@@ -23,27 +24,74 @@ contract ISAFactory is Ownable {
    * succeeded and why.
    */
   function newProposal(
-    uint256 amount,
-    uint256 percentage,
-    uint256 time,
-    address from,
-    address to
+    address _lenderAddress,
+    address _borrowerAddress,
+    uint256 _isaAmount,
+    uint256 _incomePercentage,
+    uint256 _timePeriod,
+    uint256 _buyoutAmount,
+    uint256 _minimumIncome,
+    uint256 _paymentCap
   )
     external
   {
-    require(amount > 0);
-    require(percentage >= 0);
-    require(percentage <= 100);
-    require(time > 0);
-    require(from != address(0));
-    require(to != address(0));
+    require(_lenderAddress != address(0));
+    require(_borrowerAddress != address(0));
+    require(_isaAmount > 0);
+    require(_incomePercentage >= 0);
+    require(_incomePercentage <= 100);
+    require(_timePeriod > 0);
+    require(_buyoutAmount > 0);
+    require(_minimumIncome > 0);
+    require(_paymentCap > 0);
 
-    Proposal proposal = new Proposal(amount, percentage, time, from, to);
+    Proposal proposal = new Proposal(_lenderAddress, _borrowerAddress,
+      _isaAmount, _incomePercentage, _timePeriod, _buyoutAmount, _minimumIncome,
+      _paymentCap);
+
+    proposals.push(proposal);
   }
 
-  function requestProposal(Proposal proposal) external returns(bool, string memory) {
-    proposal.request();
-    return _regulator.request(proposal);
+  function requestProposal(Proposal proposal) external returns(bool, string memory){
+    return regulator.request(proposal);
+  }
+
+  function getProposalNumber() public view returns (uint256) {
+    uint256 j = 0;
+    for (uint256 i = 0 ; i < proposals.length ; i++) {
+      if (proposals[i].lenderAddress() == msg.sender || proposals[i].borrowerAddress() == msg.sender) {
+        j++;
+      }
+    }
+    return j;
+  }
+
+  function getPendingProposals() external returns (Proposal[] memory coll)
+  {
+    coll = new Proposal[](getProposalNumber());
+
+    uint256 j = 0;
+    for (uint256 i = 0 ; i < proposals.length ; i++) {
+      if (proposals[i].lenderAddress() == msg.sender && !proposals[i].lenderAgree()) {
+        if (proposals[i].borrowerAddress() == msg.sender && !proposals[i].borrowerAgree()) {
+          coll[j] = proposals[i];
+          j++;
+        }
+      }
+    }
+
+    return coll;
+  }
+
+  function getAllProposals() external returns (Proposal[] memory coll)
+  {
+    coll = new Proposal[](proposals.length);
+
+    for (uint256 i = 0 ; i < proposals.length ; i++) {
+        coll[i] = proposals[i];
+    }
+
+    return coll;
   }
 
   /**

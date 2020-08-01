@@ -10,6 +10,8 @@ contract Regulator is Ownable {
 
   Verifier private verifier;
   mapping(bytes32 => bool) validIdentites;
+  mapping(address => bool) confirmedAddresses;
+  mapping(bytes32 => bool) confirmedIdentities;
 
   event requestProposal(Proposal proposal);
 
@@ -20,9 +22,19 @@ contract Regulator is Ownable {
   /*
   * @dev allows the owner of the contract to add an eligible consumer detail hash
   */
-  function addIdentity(bytes32 hash) public onlyOwner {
+  function addValidIdentity(bytes32 hash) public onlyOwner {
     require(!validIdentites[hash]);
     validIdentites[hash] = true;
+  }
+
+  function confirmRegister(bytes32 hash, address user) public onlyOwner {
+    require(!confirmedIdentities[hash]);
+    confirmedIdentities[hash] = true;
+    confirmedAddresses[user] = true;
+  }
+
+  function getConfirmedIdentity() public view returns(bool) {
+    return confirmedAddresses[msg.sender];
   }
 
 
@@ -36,8 +48,17 @@ contract Regulator is Ownable {
     bool success
   ) external returns(bool)
   {
+    //require(validIdentites[hash])
+    //require(!confirmedIdentities[hash])
+    //require(!confirmedAddresses[hash])
+
     // Calls zero knowledge proof to verify identity
-    return verifier.verifyTx(success);
+    bool result = verifier.verifyTx(success);
+    if (result) {
+      confirmedAddresses[msg.sender] = true;
+      //confirmedIdentities[hash] = true;
+    }
+    return result;
   }
 
   /**
@@ -49,11 +70,11 @@ contract Regulator is Ownable {
    */
   function request(Proposal proposal) public returns(bool, string memory) {
     if (!proposal.bothAgree()) {
-      return (false, "Both parties must agree to proposal");
+      return (false, "Both parties must agree to Proposal");
     } else {
       // Access off-chain database and check validity of ISA proposal
       emit requestProposal(proposal);
-      return (true, "Proposal successful");
+      return (true, "Proposal request has been sent to Regulator");
     }
   }
 }

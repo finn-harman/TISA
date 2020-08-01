@@ -5,74 +5,55 @@ import "openzeppelin-solidity/contracts/access/Ownable.sol";
 
 contract Proposal {
 
-  uint256 public amount;
-  uint256 public percentage;
-  uint256 public time;
-  address public from;
-  address public to;
+  address public lenderAddress;
+  address public borrowerAddress;
+  uint256 public isaAmount;
+  uint256 public incomePercentage;
+  uint256 public timePeriod;
+  uint256 public buyoutAmount;
+  uint256 public minimumIncome;
+  uint256 public paymentCap;
 
-  bool private fromAgree;
-  bool private toAgree;
+  bool public lenderAgree;
+  bool public borrowerAgree;
   bool public bothAgree;
 
-  bool public requested;
-  bool public requestStatus;
-  string public requestReason;
-
   constructor(
-    uint256 _amount,
-    uint256 _percentage,
-    uint256 _time,
-    address _from,
-    address _to
+    address _lenderAddress,
+    address _borrowerAddress,
+    uint256 _isaAmount,
+    uint256 _incomePercentage,
+    uint256 _timePeriod,
+    uint256 _buyoutAmount,
+    uint256 _minimumIncome,
+    uint256 _paymentCap
   )
     public
   {
-    amount = _amount;
-    percentage = _percentage;
-    time = _time;
-    from = _from;
-    to = _to;
+    lenderAddress = _lenderAddress;
+    borrowerAddress = _borrowerAddress;
+    isaAmount = _isaAmount;
+    incomePercentage = _incomePercentage;
+    timePeriod = _timePeriod;
+    buyoutAmount = _buyoutAmount;
+    minimumIncome = _minimumIncome;
+    paymentCap = _paymentCap;
 
-    fromAgree = false;
-    toAgree = false;
+    lenderAgree = false;
+    borrowerAgree = false;
     bothAgree = false;
-
-    requested = false;
   }
 
   function agree() external {
-    require(msg.sender == from || msg.sender == to);
-    if (msg.sender == from) {
-      fromAgree = true;
+    require(msg.sender == lenderAddress || msg.sender == borrowerAddress);
+    if (msg.sender == lenderAddress) {
+      lenderAgree = true;
     } else {
-      toAgree = true;
+      borrowerAgree = true;
     }
 
-    if (fromAgree && toAgree) {
+    if (lenderAgree && borrowerAgree) {
       bothAgree = true;
     }
-  }
-
-  function disagree() external {
-    require(msg.sender == from || msg.sender == to);
-    if (msg.sender == from) {
-      fromAgree = false;
-    } else {
-      toAgree = false;
-    }
-    bothAgree = false;
-  }
-
-  function request() external {
-    requested = true;
-  }
-
-  function setRequestStatus(bool status) external {
-    requestStatus = status;
-  }
-
-  function setRequestReason(string calldata reason) external {
-    requestReason = reason;
   }
 }

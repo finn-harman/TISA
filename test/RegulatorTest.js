@@ -1,6 +1,6 @@
-const VerifierContract = artifacts.require("Verifier");
+const RegulatorContract = artifacts.require("Regulator");
 
-contract("Verifier", (accounts) => {
+contract("Regulator:", (accounts) => {
 
   let verifier;
 

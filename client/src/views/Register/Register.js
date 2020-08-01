@@ -63,7 +63,7 @@ export default function Register() {
           RegulatorContract.abi,
           deployedNetwork && deployedNetwork.address,
         );
-        console.log("connected to verifier contract")
+        console.log("connected to Regulator contract")
 
         setWeb3(web3)
         setContract(instance)
@@ -105,6 +105,7 @@ export default function Register() {
       // Generate witness based on hash using zokrates
       // Manipulate return value
       // Call verifyTx of Verifier.sol to verify hash
+      console.log("Registering from account: " + currentAccount)
       const verifiedEvent = await contract.methods.register(true).send( {from: currentAccount} )
       // If successful, check hash against database and add address to database
       console.log(verifiedEvent)
@@ -119,7 +120,7 @@ export default function Register() {
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-            <CardHeader color="primary">
+            <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>Register</h4>
               <p className={classes.cardCategoryWhite}>Enter your personal details to connect your real life identity to your Ethereum address</p>
             </CardHeader>
@@ -178,7 +179,7 @@ export default function Register() {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button onClick={registerDetails} color="primary">Register Details</Button>
+              <Button onClick={registerDetails} color="info">Register Details</Button>
             </CardFooter>
           </Card>
         </GridItem>
