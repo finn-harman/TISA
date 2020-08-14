@@ -16,6 +16,7 @@
     "mongoose": "^5.9.25",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.4",
+    "openlaw": "^0.2.44",
     "perfect-scrollbar": "1.5.0",
     "prop-types": "15.7.2",
     "react": "16.13.1",

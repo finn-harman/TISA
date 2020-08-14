@@ -23,6 +23,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import CardActions from '@material-ui/core/CardActions';
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import OpenLaw from "components/OpenLaw/OpenLaw.js"
 
 import Web3 from "web3";
 
@@ -35,7 +36,7 @@ const useStyles = makeStyles({
 
 export default function ProposalDialog(props) {
   const classes = useStyles();
-  const { onClose, proposal, pending, open } = props;
+  const { onClose, proposal, open } = props;
 
   const [ web3, setWeb3 ] = useState(null);
   const [ accounts, setAccounts ] = useState(null);
@@ -70,13 +71,8 @@ export default function ProposalDialog(props) {
     var lenderAddressCall = await instance.methods.lenderAddress().call()
     var borrowerAddressCall = await instance.methods.borrowerAddress().call()
 
-    if (lenderAddressCall == currentAccount) {
-      lenderAddress.push("You")
-      borrowerAddress.push(borrowerAddressCall)
-    } else {
-      lenderAddress.push(lenderAddressCall)
-      borrowerAddress.push("You")
-    }
+    lenderAddress.push(lenderAddressCall)
+    borrowerAddress.push(borrowerAddressCall)
 
     var isaAmount = ["ISA Amount"]
     isaAmount.push("$" + await instance.methods.isaAmount().call())
@@ -117,46 +113,28 @@ export default function ProposalDialog(props) {
     await proposal.methods.reject().send( {from: currentAccount} )
   }
 
+
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-            {pending === true ? (
             <CardHeader color="info">
-              <h4 className={classes.cardTitleWhite}>Pending ISA Proposal</h4>
+              <h4 className={classes.cardTitleWhite}>ISA Proposal</h4>
               <p className={classes.cardCategoryWhite}>
-                Here is a detailed description of a pending ISA proposal you have been included in.
-                If you agree to the terms of this ISA, please click confirm. Once both parties have
-                clicked confirm, you will both be sent a legal contract to sign at which point the
-                ISA will be created.
+                Here is a detailed description of a ISA proposal you have been included in.
               </p>
             </CardHeader>
-            ) : (
-              <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Signed ISA Proposal</h4>
-                <p className={classes.cardCategoryWhite}>
-                  Here is a detailed description of an agreed ISA proposal you have been included in.
-                  Once both parties have agreed, you will both be sent a legal contract to sign at which point the
-                  ISA will be created.
-                </p>
-              </CardHeader>
-            )}
             <CardBody>
               <ProposalDialogTable
                 tableHeaderColor="info"
                 tableData={proposalData}
               />
             </CardBody>
-            {pending === true ? (
-            <CardActions>
-              <Button onClick={acceptProposal} color="success">Accept</Button>
-              <Button onClick={rejectProposal} color="danger">Reject</Button>
-            </CardActions>
-            ) : null}
           </Card>
         </GridItem>
       </GridContainer>
+      <OpenLaw proposal={proposal}/>
     </Dialog>
   );
 }

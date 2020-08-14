@@ -11,7 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';import Close from "@material-ui/icons/Close";
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import ProposalDialog from "components/ProposalDialog/ProposalDialog.js";
+import RegulatorDialog from "components/RegulatorDialog/RegulatorDialog.js";
 
 import ISAFactoryContract from "../../contracts/ISAFactory.json";
 import ProposalContract from "../../contracts/Proposal.json";
@@ -25,22 +25,22 @@ const useStyles = makeStyles(styles);
 export default function ProposalTable(props) {
   const classes = useStyles();
 
-  const { tableHeaderColor, tableHead, tableData, isRegistered, pending } = props;
+  const { tableHeaderColor, tableHead, tableData } = props;
+
   const [open, setOpen] = React.useState(false);
 
   const [ web3, setWeb3 ] = useState(null);
   const [ isaFactoryContract, setIsaFactoryContract] = useState(null);
   const [ accounts, setAccounts ] = useState(null);
   const [ currentAccount, setCurrentAccount ] = useState(null);
-  const [ proposals, setProposals ] = useState(null)
-  const [ pendingProposals, setPendingProposals ] = useState(null)
-  const [ signedProposals, setSignedProposals ] = useState(null)
-  const [ pendingProposalsData, setPendingProposalsData ] = useState(null)
-  const [ signedProposalsData, setSignedProposalsData ] = useState(null)
+  const [ newProposals, setNewProposals ] = useState(null)
+  const [ newProposalsContracts, setNewProposalsContracts ] = useState(null)
+  const [ newProposalsData, setNewProposalsData ] = useState(null)
+  const [ isOwner, setIsOwner ] = useState(null)
 
   useEffect(() => {
     const init = async() => {
-      console.log("Loading Proposal Table")
+      console.log("Loading Regulator Table")
       const web3Instance = new Web3(window.ethereum);
       const networkId = await web3Instance.eth.net.getId();
       const isaFactoryDeployedNetwork = ISAFactoryContract.networks[networkId];
@@ -54,29 +54,22 @@ export default function ProposalTable(props) {
       setIsaFactoryContract(isaFactoryInstance)
       setAccounts(accounts)
       setCurrentAccount(accounts[0])
-      console.log("Account has " + await isaFactoryInstance.methods.getUsersProposalNumber().call( {from: accounts[0]}) + " proposals")
-      console.log("There are " + await isaFactoryInstance.methods.getAllProposalNumber().call( {from: accounts[0] }) + " proposals in total")
+      setIsOwner(accounts[0] == await isaFactoryInstance.methods.getRegulatorAddress().call( { from: accounts[0] }))
 
-      if (await isaFactoryInstance.methods.getUsersProposalNumber().call( {from: accounts[0]} ) > 0) {
+      console.log("all agreed proposal number: ", await isaFactoryInstance.methods.getAllAgreedProposalNumber().call( {from: accounts[0]}))
+      console.log("all proposal number: ", await isaFactoryInstance.methods.getAllProposalNumber().call( {from: accounts[0]}))
+
+      if (await isaFactoryInstance.methods.getAllAgreedProposalNumber().call( {from: accounts[0]} ) > 0) {
         const prop = await getProposalsFromISAFactory(isaFactoryInstance, accounts[0])
-        setProposals(prop)
+        setNewProposals(prop)
 
-        const pendingProp = await getPendingProposalContracts(prop, web3Instance, accounts[0])
-        setPendingProposals(pendingProp)
+        const agreedProp = await getAgreedProposalContracts(prop, web3Instance, accounts[0])
+        setNewProposalsContracts(agreedProp)
 
-        const signedProp = await getSignedProposalContracts(prop, web3Instance, accounts[0])
-        setSignedProposals(signedProp)
-
-        if (pendingProp.length > 0) {
-          const pendingPropData = await getProposalDataFromProposalContracts(pendingProp, accounts[0])
-          console.log("Pending proposal data: "+ pendingPropData)
-          setPendingProposalsData(pendingPropData)
-        }
-
-        if (signedProp.length > 0) {
-          const signedPropData = await getProposalDataFromProposalContracts(signedProp, accounts[0])
-          console.log("Signed proposal data: "+ signedPropData)
-          setSignedProposalsData(signedPropData)
+        if (agreedProp.length > 0) {
+          const agreedPropData = await getProposalDataFromProposalContracts(agreedProp)
+          console.log("Agreed proposal data: "+ agreedPropData)
+          setNewProposalsData(agreedPropData)
         }
       }
     }
@@ -85,67 +78,39 @@ export default function ProposalTable(props) {
   }, []);
 
   function getProposalsData() {
-    if (pending) {
-      return pendingProposalsData;
-    } else {
-      return signedProposalsData;
-    }
+    return newProposalsData
   }
 
   function getProposals() {
-    if (pending) {
-      return pendingProposals
-    } else {
-      return signedProposals
-    }
+    return newProposalsContracts
   }
 
   function anyProposals() {
-    if (pending && pendingProposalsData != null) {
-      return true;
-    }
-    if (!pending && signedProposalsData != null) {
+    if (newProposalsData != null) {
       return true;
     }
     return false;
   }
 
   async function getProposalsFromISAFactory(isaFactoryInstance, account) {
-    const proposals = await isaFactoryInstance.methods.getUsersProposals().call( {from: account})
+    const proposals = await isaFactoryInstance.methods.getAllAgreedProposals().call( {from: account})
     return proposals
   }
 
-  async function getPendingProposalContracts(proposals, web3, account) {
-    var pendingProposals = []
+  async function getAgreedProposalContracts(proposals, web3, account) {
+    var agreedProposals = []
     for (var i = 0 ; i < proposals.length ; i++) {
       const instance = new web3.eth.Contract(
         ProposalContract.abi,
         proposals[i]
       );
 
-      if (await instance.methods.isPending().call( {from: account})) {
-        pendingProposals.push(instance)
-      }
+      agreedProposals.push(instance)
     }
-    return pendingProposals
+    return agreedProposals
   }
 
-  async function getSignedProposalContracts(proposals, web3, account) {
-    var signedProposals = []
-    for (var i = 0 ; i < proposals.length ; i++) {
-      const instance = new web3.eth.Contract(
-        ProposalContract.abi,
-        proposals[i]
-      );
-
-      if (await instance.methods.isSigned().call( {from: account})) {
-        signedProposals.push(instance)
-      }
-    }
-    return signedProposals
-  }
-
-  async function getProposalDataFromProposalContracts(proposals, account) {
+  async function getProposalDataFromProposalContracts(proposals) {
     var allProposalData = []
     for (var i = 0 ; i < proposals.length ; i++) {
       var instance = proposals[i]
@@ -155,14 +120,8 @@ export default function ProposalTable(props) {
 
       const lenderAddress = await instance.methods.lenderAddress().call()
       const borrowerAddress = await instance.methods.borrowerAddress().call()
-
-      if (lenderAddress == account) {
-        proposalData.push("You")
-        proposalData.push(borrowerAddress)
-      } else {
-        proposalData.push(lenderAddress)
-        proposalData.push("You")
-      }
+      proposalData.push(lenderAddress)
+      proposalData.push(borrowerAddress)
 
       proposalData.push("$" + await instance.methods.isaAmount().call())
       proposalData.push(await instance.methods.incomePercentage().call() + "%")
@@ -187,11 +146,11 @@ export default function ProposalTable(props) {
       <Table className={classes.table}>
         {tableHead !== undefined ? (
           <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
-          {(isRegistered === false || isRegistered === undefined) ? (
+          {( isOwner !== true ) ? (
             <TableRow className={classes.tableHeadRow}>
                 <TableCell>
                   <h3>
-                    Please first register your address.
+                    Only visible to Regulator.
                   </h3>
                 </TableCell>
             </TableRow>
@@ -212,14 +171,14 @@ export default function ProposalTable(props) {
             <TableRow className={classes.tableHeadRow}>
                 <TableCell>
                   <h3>
-                    Once Proposals are created, they will show here.
+                    Once Proposals are agreed to by both parties, they will show here.
                   </h3>
                 </TableCell>
             </TableRow>
           )}
           </TableHead>
         ) : null}
-        {isRegistered !== false && tableData !== null && anyProposals() !== false ? (
+        {isOwner !== false && tableData !== null && anyProposals() !== false ? (
         <TableBody>
           {getProposalsData().map((prop, key) => {
             return (
@@ -250,7 +209,7 @@ export default function ProposalTable(props) {
                       />
                     </IconButton>
                   </Tooltip>
-                  <ProposalDialog proposal={getProposals()[key]} pending={pending} open={open} onClose={handleClose} />
+                  <RegulatorDialog proposal={getProposals()[key]} open={open} onClose={handleClose} />
                 </TableCell>
               </TableRow>
             );
@@ -278,5 +237,4 @@ ProposalTable.propTypes = {
   ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-  isRegistered: PropTypes.oneOf(PropTypes.bool)
 };

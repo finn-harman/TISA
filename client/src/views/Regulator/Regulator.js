@@ -24,7 +24,7 @@ import Cloud from "@material-ui/icons/Cloud";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
-import ProposalTable from "components/ProposalTable/ProposalTable.js";
+import RegulatorTable from "components/RegulatorTable/RegulatorTable.js";
 import Tasks from "components/Tasks/Tasks.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import Danger from "components/Typography/Danger.js";
@@ -64,7 +64,6 @@ export default function Dashboard() {
   const [ isRegistered, setIsRegistered ] = useState(null)
 
   useEffect(() => {
-    console.log("User dashboard loading...")
     const init = async() => {
       try {
         // const web3Instance = new Web3(window.ethereum);
@@ -90,7 +89,6 @@ export default function Dashboard() {
         const registered = await regulatorInstance.methods.getConfirmedIdentity().call( {from: accounts[0] })
         setIsRegistered(registered)
 
-        console.log("currentAccount: " + accounts[0], "registered? " + registered)
       } catch(error) {
         alert(
           `Failed to load web3, accounts, or contract. Check console for details.`,
@@ -102,125 +100,36 @@ export default function Dashboard() {
     init();
   }, []);
 
-  function Registered(props) {
-    if (isRegistered) {
-      return <RegisteredCard />
-    } else {
-      return <UnregisteredCard />
-    }
-  }
-
-  function RegisteredCard(props) {
-    return (
-      <Card>
-        <CardHeader color="success" stats icon>
-          <CardIcon color="success">
-            <Icon>check</Icon>
-          </CardIcon>
-          <p className={classes.cardCategory}>Account Registered</p>
-          <h3 className={classes.cardTitle}>
-            {currentAccount}
-          </h3>
-        </CardHeader>
-      </Card>
-    )
-  }
-
-  function UnregisteredCard(props) {
-    return (
-      <Card>
-        <CardHeader color="danger" stats icon>
-          <CardIcon color="danger">
-            <Icon>close</Icon>
-          </CardIcon>
-          <p className={classes.cardCategory}>Account Unregistered</p>
-          <h3 className={classes.cardTitle}>
-            {currentAccount}
-          </h3>
-        </CardHeader>
-        <CardFooter stats>
-          <div className={classes.stats}>
-            <Danger>
-              <LockOpen />
-            </Danger>
-              <a href="/admin/Register">
-              Register Account
-            </a>
-          </div>
-        </CardFooter>
-      </Card>
-    )
-  }
 
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={9}>
-          <Registered />
-        </GridItem>
-      </GridContainer>
-      <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <CustomTabs
-            title="Proposals:"
+            title="ISAs:"
             headerColor="info"
             tabs={[
               {
-                tabName: "Pending",
+                tabName: "New",
                 tabIcon: HourglassEmptyIcon,
                 tabContent: (
-                  <ProposalTable
+                  <RegulatorTable
                     tableHeaderColor="info"
                     tableHead={["Symbol", "Lender", "Borrower", "ISA Amount", "Income Percentage", "ISA Period"]}
-                    isRegistered={isRegistered}
-                    pending={true}
+
                   />
                 )
               },
               {
-                tabName: "Agreed",
+                tabName: "Transfers",
                 tabIcon: CheckIcon,
                 tabContent: (
-                  <ProposalTable
+                  <RegulatorTable
                     tableHeaderColor="info"
                     tableHead={["Symbol", "Lender", "Borrower", "ISA Amount", "Income Percentage", "ISA Period"]}
-                    isRegistered={isRegistered}
-                    pending={false}
                   />
                 )
               },
-            ]}
-          />
-        </GridItem>
-      </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
-          <CustomTabs
-            title="Income Sharing Agreements:"
-            headerColor="info"
-            tabs={[
-              /*{
-                tabName: "Borrower",
-                tabIcon: ArrowUpwardIcon,
-                tabContent: (
-                  <ProposalTable
-                    tableHeaderColor="info"
-                    tableHead={["ID", "Address", "Amount", "Percentage", "Total Paid"]}
-                    isRegistered={isRegistered}
-                  />
-                )
-              },
-              {
-                tabName: "Lender",
-                tabIcon: ArrowDownwardIcon,
-                tabContent: (
-                  <ProposalTable
-                    tableHeaderColor="info"
-                    tableHead={["ID", "Address", "Amount", "Percentage", "Total Paid"]}
-                    isRegistered={isRegistered}
-                  />
-                )
-              },*/
             ]}
           />
         </GridItem>

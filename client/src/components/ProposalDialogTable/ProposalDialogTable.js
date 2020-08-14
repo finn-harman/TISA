@@ -33,7 +33,7 @@ export default function ProposalDialogTable(props) {
     setSelectedValue(value);
   };
 
-  const { tableHeaderColor, tableHead, tableData, view } = props;
+  const { tableHeaderColor, tableHead, tableData } = props;
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -89,5 +89,4 @@ ProposalDialogTable.propTypes = {
   ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-  viewOption: PropTypes.oneOf(PropTypes.bool)
 };

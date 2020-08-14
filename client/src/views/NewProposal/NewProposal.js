@@ -80,8 +80,8 @@ export default function NewProposal() {
     init();
   }, []);
 
-  const [ lenderAddress, setLenderAddress ] = useState("0xd0Cf03935c217B9C192e3cD12885c136cfC82e95")
-  const [ borrowerAddress, setBorrowerAddress ] = useState("0x1d11E4335012202E17adf951155F78dEEBBFDCa4")
+  const [ lenderAddress, setLenderAddress ] = useState("0x1d11E4335012202E17adf951155F78dEEBBFDCa4")
+  const [ borrowerAddress, setBorrowerAddress ] = useState("0x7C930023700702CdF3c4C22E33b705C92fd08AC3")
   const [ isaAmount, setIsaAmount ] = useState(100000)
   const [ incomePercentage, setIncomePercentage ] = useState(30)
   const [ timePeriod, setTimePeriod ] = useState(18)
@@ -93,14 +93,20 @@ export default function NewProposal() {
     if (!lenderAddress || !borrowerAddress || !isaAmount || !incomePercentage || !timePeriod || !buyoutAmount || !minimumIncome || !paymentCap) {
       alert("Error: All fields must be completed");
     } else {
+      console.log("lender address: " + lenderAddress)
+      console.log("borrower address: " + borrowerAddress)
+      console.log("ISA amount: " + isaAmount)
+      console.log("Income percentage: " + incomePercentage)
+      console.log("Time period: " + timePeriod)
+      console.log("buyout amount: " + buyoutAmount)
+      console.log("minimumIncome: " + minimumIncome)
+      console.log("payment cap: " + paymentCap)
+
       const proposal = await contract.methods.newProposal(lenderAddress, borrowerAddress,
         isaAmount, incomePercentage, timePeriod, buyoutAmount, minimumIncome,
         paymentCap
       ).send( {from: currentAccount} )
       console.log(proposal)
-      // console.log(success)
-      // If successful, check hash against database and add address to database
-
     }
   }
 
@@ -111,41 +117,41 @@ export default function NewProposal() {
           <Card>
             <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>New Proposal</h4>
-              <p className={classes.cardCategoryWhite}>Enter the details of a new ISA proposal</p>
+              <p className={classes.cardCategoryWhite}>Enter the details of a new ISA proposal in which you are the lender.</p>
             </CardHeader>
             <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setLenderAddress(e.target.value)}
-                  >
-                  <CustomInput
-                    labelText="Lender Address"
-                    id="lender-address"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setBorrowerAddress(e.target.value)}
-                  >
-                  <CustomInput
-                    labelText="Borrower Address"
-                    id="borrower-address"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={6}
+                onChange={(e) => setLenderAddress(e.target.value)}
+                >
+                <CustomInput
+                  labelText="Lender Address"
+                  id="lender-address"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                />
+              </GridItem>
+            </GridContainer>
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={6}
+                onChange={(e) => setBorrowerAddress(e.target.value)}
+                >
+                <CustomInput
+                  labelText="Borrower Address"
+                  id="borrower-address"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                />
+              </GridItem>
+            </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}
                   onChange={(e) => setIsaAmount(parseInt(e.target.value, 10))}
                   >
                   <CustomInput
-                    labelText="ISA Amount ($)"
+                    labelText="ISA Amount (ether)"
                     id="isa-amount"
                     formControlProps={{
                       fullWidth: true

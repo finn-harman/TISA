@@ -13,8 +13,6 @@ contract Regulator is Ownable {
   mapping(address => bool) confirmedAddresses;
   mapping(bytes32 => bool) confirmedIdentities;
 
-  event requestProposal(Proposal proposal);
-
   constructor(Verifier _verifier) public {
     verifier = _verifier;
   }
@@ -33,8 +31,8 @@ contract Regulator is Ownable {
     confirmedAddresses[user] = true;
   }
 
-  function getConfirmedIdentity() public view returns(bool) {
-    return confirmedAddresses[msg.sender];
+  function getConfirmedAddress(address person) public view returns(bool) {
+    return confirmedAddresses[person];
   }
 
 
@@ -61,20 +59,4 @@ contract Regulator is Ownable {
     return result;
   }
 
-  /**
-   * @dev Requests creation of new ISA. Proposal is compared to whitelist and
-   * legal contract emails are sent if valid
-   *
-   * Returns a boolean value and message indicating whether the operation
-   * succeeded and why.
-   */
-  function request(Proposal proposal) public returns(bool, string memory) {
-    if (!proposal.bothAgree()) {
-      return (false, "Both parties must agree to Proposal");
-    } else {
-      // Access off-chain database and check validity of ISA proposal
-      emit requestProposal(proposal);
-      return (true, "Proposal request has been sent to Regulator");
-    }
-  }
 }
