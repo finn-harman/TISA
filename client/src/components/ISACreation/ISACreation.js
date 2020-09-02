@@ -19,7 +19,7 @@ import Web3 from "web3";
 
      //PLEASE SUPPLY YOUR OWN LOGIN CREDENTIALS and TEMPLATE NAME FOR OPENLAW
     const URL = "https://lib.openlaw.io/api/v1/default";  //url for your openlaw instance eg. "http://lib.openlaw.io"
-    const TEMPLATE_NAME = "OpenLaw API Tutorial Sale Agreement - Fi"; //name of template stored on Openlaw
+    const TEMPLATE_NAME = "Income Sharing Agreement Creation - TISA"; //name of template stored on Openlaw
     const OPENLAW_USER = 'finnharman@gmail.com'; //add your Openlaw login email
     const OPENLAW_PASSWORD = '47MhWS2E@FypaaW' //add your Openlaw password
     //create config
@@ -33,7 +33,7 @@ import Web3 from "web3";
     //create an instance of the API client with url as parameter
     const apiClient = new APIClient(URL);
 
-class OpenLaw extends Component {
+class ISACreation extends Component {
 
   constructor(props) {
     super(props)
@@ -41,13 +41,15 @@ class OpenLaw extends Component {
   }
 //initial state of variables for BillOfSale Template, and web3,etc
   state = {
-
-      seller: '',
-      buyer: '',
-      descr: '',
-      price: '',
-      buyerEmail:'',
-      sellerEmail:'',
+      lenderName: '',
+      lenderEmail: '',
+      borrowerName:'',
+      borrowerEmail:'',
+      paymentAmount:'',
+      percentage:'',
+      minMonthlyIncome:'',
+      ISAPaymentCap:'',
+      ISALength:'',
       web3: null,
       accounts: null,
       contract: null,
@@ -78,46 +80,45 @@ class OpenLaw extends Component {
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance }, this.runExample);
 
-    //Login to your instance with your email and password, return JSON
-    apiClient.login(openLawConfig.userName,openLawConfig.password).then(console.log);
+      //Login to your instance with your email and password, return JSON
+      apiClient.login(openLawConfig.userName,openLawConfig.password).then(console.log);
 
-    //Retrieve your OpenLaw template by name, use async/await
-    const myTemplate = await apiClient.getTemplate(openLawConfig.templateName);
+      //Retrieve your OpenLaw template by name, use async/await
+      const myTemplate = await apiClient.getTemplate(openLawConfig.templateName);
 
-   //pull properties off of JSON and make into variables
-    const myTitle = myTemplate.title;
-    //set title state
-    this.setState({myTitle});
+     //pull properties off of JSON and make into variables
+      const myTitle = myTemplate.title;
+      //set title state
+      this.setState({myTitle});
 
-    //Retreive the OpenLaw Template, including MarkDown
-    const myContent = myTemplate.content;
-    this.setState({myTemplate});
-    console.log('myTemplate..',myTemplate);
+      //Retreive the OpenLaw Template, including MarkDown
+      const myContent = myTemplate.content;
+      this.setState({myTemplate});
+      console.log('myTemplate..',myTemplate);
 
-     const contractId =  myTemplate.id;
-    console.log("contract id..",contractId);
+       const contractId =  myTemplate.id;
+      console.log("contract id..",contractId);
 
-    //TEST this function ?
-    //   apiClient.getAccessToken(contractId)
-    // .then(({ data }) => console.log(data));
+      //TEST this function ?
+      //   apiClient.getAccessToken(contractId)
+      // .then(({ data }) => console.log(data));
 
-    //Get the most recent version of the OpenLaw API Tutorial Template
-    const versions = await apiClient.getTemplateVersions(openLawConfig.templateName, 20, 1);
-    console.log("versions..",versions[0], versions.length);
+      //Get the most recent version of the OpenLaw API Tutorial Template
+      const versions = await apiClient.getTemplateVersions(openLawConfig.templateName, 20, 1);
+      console.log("versions..",versions[0], versions.length);
 
-    //Get the creatorID from the template.
-    const creatorId = versions[0].creatorId;
-    console.log("creatorId..",creatorId);
-    this.setState({creatorId});
+      //Get the creatorID from the template.
+      const creatorId = versions[0].creatorId;
+      console.log("creatorId..",creatorId);
+      this.setState({creatorId});
 
-    //Get my compiled Template, for use in rendering the HTML in previewTemplate
-    const myCompiledTemplate = await Openlaw.compileTemplate(myContent);
-    if (myCompiledTemplate.isError) {
-      throw "my Template error" + myCompiledTemplate.errorMessage;
-    }
-     console.log("my compiled template..",myCompiledTemplate);
-     this.setState({myCompiledTemplate});
-
+      //Get my compiled Template, for use in rendering the HTML in previewTemplate
+      const myCompiledTemplate = await Openlaw.compileTemplate(myContent);
+      if (myCompiledTemplate.isError) {
+        throw "my Template error" + myCompiledTemplate.errorMessage;
+      }
+       console.log("my compiled template..",myCompiledTemplate);
+       this.setState({myCompiledTemplate});
 
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -197,12 +198,15 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
       text: myTemplate.content,
       creator: this.state.creatorId,
       parameters: {
-        "Seller Address": this.state.seller,
-        "Buyer Address": this.state.buyer,
-        "Purchased Item": this.state.descr,
-        "Purchase Price": this.state.price,
-        "Seller Signatory Email": this.state.sellerEmail,//JSON.stringify(this.convertUserObject(sellerUser)),
-        "Buyer Signatory Email": this.state.buyerEmail,//JSON.stringify(this.convertUserObject(buyerUser)),
+        "Lender Name": this.state.lenderName,
+        "Lender Email": this.state.lenderEmail,
+        "Borrower Name": this.state.borrowerName,
+        "Borrower Email": this.state.borrowerEmail,
+        "Lender Payment Amount": this.state.paymentAmount,
+        "Income Share Percentage": this.state.percentage,
+        "Minimum Monthly Amount": this.state.minMonthlyIncome,
+        "Payment Cap": this.state.ISAPaymentCap,
+        "Monthly Payments": this.state.ISALength
       },
       overriddenParagraphs: {},
       agreements: {},
@@ -217,16 +221,22 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
     console.log('submiting to OL..');
     event.preventDefault();
 
-    console.log(this.state.proposal)
+    var symbol = await this.state.proposal.methods.symbol().call()
     var lenderAddress = await this.state.proposal.methods.lenderAddress().call()
     var borrowerAddress = await this.state.proposal.methods.borrowerAddress().call()
     var isaAmount = await this.state.proposal.methods.isaAmount().call()
     var incomePercentage = await this.state.proposal.methods.incomePercentage().call()
     var timePeriod = await this.state.proposal.methods.timePeriod().call()
     var minimumIncome = await this.state.proposal.methods.minimumIncome().call()
-    var paymentCap = await this.state.proposal.methods.minimumIncome().call()
+    var paymentCap = await this.state.proposal.methods.paymentCap().call()
 
-    await this.state.contract.methods.newISA(
+    this.setState({paymentAmount: isaAmount})
+    this.setState({percentage: incomePercentage})
+    this.setState({minMonthlyIncome: minimumIncome})
+    this.setState({ISAPaymentCap: paymentCap})
+    this.setState({ISALength: timePeriod})
+
+    var isa = await this.state.contract.methods.newISA(
       lenderAddress,
       borrowerAddress,
       isaAmount,
@@ -237,31 +247,34 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
       symbol
     ).send({ from: this.state.accounts[0]} )
 
-    // try{
-    //   //login to api
-    //   apiClient.login(openLawConfig.userName,openLawConfig.password);
-    //   console.log('apiClient logged in');
-    //
-    //   //add Open Law params to be uploaded
-    //   const uploadParams = await this.buildOpenLawParamsObj(this.state.myTemplate,this.state.creatorId);
-    //   console.log('parameters from user..', uploadParams.parameters);
-    //   console.log('contract text..', uploadParams.text)
-    //   console.log('all parameters uploading...', uploadParams);
-    //
-    //   // uploadDraft, sends a draft contract to "Draft Management", which can be edited.
-    //   // const draftId = await apiClient.uploadDraft(uploadParams);
-    //   // console.log('draft id..', draftId);
-    //   // this.setState({draftId});
-    //
-    //   // uploadContract, this sends a completed contract to "Contract Management", where it can not be edited.
-    //   const contractId = await apiClient.uploadContract(uploadParams);
-    //   console.log('results..', contractId)
-    //
-    //   await apiClient.sendContract([],[],contractId)
-    // }
-    // catch(error){
-    //   console.log(error);
-    // }
+    await this.state.proposal.methods.expire().send({ from: this.state.accounts[0]})
+    console.log(isa)
+
+    try{
+      //login to api
+      apiClient.login(openLawConfig.userName,openLawConfig.password);
+      console.log('apiClient logged in');
+
+      //add Open Law params to be uploaded
+      const uploadParams = await this.buildOpenLawParamsObj(this.state.myTemplate,this.state.creatorId);
+      console.log('parameters from user..', uploadParams.parameters);
+      console.log('contract text..', uploadParams.text)
+      console.log('all parameters uploading...', uploadParams);
+
+      // uploadDraft, sends a draft contract to "Draft Management", which can be edited.
+      // const draftId = await apiClient.uploadDraft(uploadParams);
+      // console.log('draft id..', draftId);
+      // this.setState({draftId});
+
+      // uploadContract, this sends a completed contract to "Contract Management", where it can not be edited.
+      const result = await apiClient.uploadContract(uploadParams);
+      console.log('results..', result)
+
+      await apiClient.sendContract([],[],result)
+    }
+    catch(error){
+      console.log(error);
+    }
   }
 
   render() {
@@ -277,11 +290,11 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
                 <CardBody>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={12}
-                      onChange={(e) => this.setState({seller: e.target.value})}
+                      onChange={(e) => this.setState({lenderName: e.target.value})}
                       >
                       <CustomInput
-                        labelText="Seller Ethereum Address"
-                        id="seller-ethereum-address"
+                        labelText="Lender's Full Name"
+                        id="lender-name"
                         formControlProps={{
                           fullWidth: true
                         }}
@@ -290,11 +303,11 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
                   </GridContainer>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={12}
-                      onChange={(e) => this.setState({descr: e.target.value})}
+                      onChange={(e) => this.setState({lenderEmail: e.target.value})}
                       >
                       <CustomInput
-                        labelText="Description Sale Item"
-                        id="description-sale-item"
+                        labelText="Lender Email Address"
+                        id="lender-email-address"
                         formControlProps={{
                           fullWidth: true
                         }}
@@ -303,11 +316,11 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
                   </GridContainer>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={12}
-                      onChange={(e) => this.setState({buyer: e.target.value})}
+                      onChange={(e) => this.setState({borrowerName: e.target.value})}
                       >
                       <CustomInput
-                        labelText="Buyer Ethereum Address"
-                        id="buyer-ethereum-address"
+                        labelText="Borrower's Full Name"
+                        id="borrower-name"
                         formControlProps={{
                           fullWidth: true
                         }}
@@ -316,37 +329,11 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
                   </GridContainer>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={12}
-                      onChange={(e) => this.setState({price: e.target.value})}
+                      onChange={(e) => this.setState({borrowerEmail: e.target.value})}
                       >
                       <CustomInput
-                        labelText="Purchase Price"
-                        id="purchase-price"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                      />
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={12}
-                      onChange={(e) => this.setState({sellerEmail: e.target.value})}
-                      >
-                      <CustomInput
-                        labelText="Seller Email Address"
-                        id="seller-email-address"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                      />
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={12}
-                      onChange={(e) => this.setState({buyerEmail: e.target.value})}
-                      >
-                      <CustomInput
-                        labelText="Buyer Email Address"
-                        id="buyer-email-address"
+                        labelText="Borrower Email Address"
+                        id="borrower-email-address"
                         formControlProps={{
                           fullWidth: true
                         }}
@@ -355,7 +342,7 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
                   </GridContainer>
                 </CardBody>
                 <CardFooter>
-                  <Button onClick={this.onSubmit} color="info">Register Details</Button>
+                  <Button onClick={this.onSubmit} color="info">Create ISA</Button>
                 </CardFooter>
               </Card>
             </GridItem>
@@ -365,4 +352,4 @@ as of " OpenLaw v.0.1.29" this function convertUserObject is no longer  needed. 
   }
 }
 
-export default OpenLaw;
+export default ISACreation;

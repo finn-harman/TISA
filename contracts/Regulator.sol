@@ -32,7 +32,10 @@ contract Regulator is Ownable {
   }
 
   function getConfirmedAddress(address person) public view returns(bool) {
-    return confirmedAddresses[person];
+    if (confirmedAddresses[person]) {
+      return true;
+    }
+    return false;
   }
 
 

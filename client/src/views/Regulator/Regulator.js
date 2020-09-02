@@ -14,17 +14,20 @@ import DateRange from "@material-ui/icons/DateRange";
 import LocalOffer from "@material-ui/icons/LocalOffer";
 import Update from "@material-ui/icons/Update";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import AccessTime from "@material-ui/icons/AccessTime";
 import Accessibility from "@material-ui/icons/Accessibility";
 import BugReport from "@material-ui/icons/BugReport";
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
+import AddIcon from '@material-ui/icons/Add';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
 import RegulatorTable from "components/RegulatorTable/RegulatorTable.js";
+import RegulatorTransferTable from "components/RegulatorTransferTable/RegulatorTransferTable.js"
 import Tasks from "components/Tasks/Tasks.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import Danger from "components/Typography/Danger.js";
@@ -61,7 +64,6 @@ export default function Dashboard() {
   const [ isaFactoryContract, setIsaFactoryContract] = useState(null);
   const [ accounts, setAccounts ] = useState(null);
   const [ currentAccount, setCurrentAccount ] = useState(null);
-  const [ isRegistered, setIsRegistered ] = useState(null)
 
   useEffect(() => {
     const init = async() => {
@@ -86,8 +88,6 @@ export default function Dashboard() {
         setIsaFactoryContract(isaFactoryInstance)
         setAccounts(accounts)
         setCurrentAccount(accounts[0])
-        const registered = await regulatorInstance.methods.getConfirmedIdentity().call( {from: accounts[0] })
-        setIsRegistered(registered)
 
       } catch(error) {
         alert(
@@ -110,23 +110,22 @@ export default function Dashboard() {
             headerColor="info"
             tabs={[
               {
-                tabName: "New",
-                tabIcon: HourglassEmptyIcon,
+                tabName: "Create",
+                tabIcon: AddIcon,
                 tabContent: (
                   <RegulatorTable
                     tableHeaderColor="info"
                     tableHead={["Symbol", "Lender", "Borrower", "ISA Amount", "Income Percentage", "ISA Period"]}
-
                   />
                 )
               },
               {
-                tabName: "Transfers",
-                tabIcon: CheckIcon,
+                tabName: "Transfer",
+                tabIcon: ArrowForwardIcon,
                 tabContent: (
-                  <RegulatorTable
+                  <RegulatorTransferTable
                     tableHeaderColor="info"
-                    tableHead={["Symbol", "Lender", "Borrower", "ISA Amount", "Income Percentage", "ISA Period"]}
+                    tableHead={["Symbol", "Seller", "Tokens", "Cost"]}
                   />
                 )
               },

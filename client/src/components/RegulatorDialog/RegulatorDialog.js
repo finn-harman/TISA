@@ -23,7 +23,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import CardActions from '@material-ui/core/CardActions';
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import OpenLaw from "components/OpenLaw/OpenLaw.js"
+import ISACreation from "components/ISACreation/ISACreation.js"
 
 import Web3 from "web3";
 
@@ -52,14 +52,14 @@ export default function ProposalDialog(props) {
       setAccounts(accounts)
       setCurrentAccount(accounts[0])
 
-      const propData = await getProposalData(proposal)
+      const propData = await getProposalData(proposal, web3Instance)
       setProposalData(propData)
     }
 
     init();
   }, []);
 
-  async function getProposalData(instance) {
+  async function getProposalData(instance, web3Instance) {
     var proposalData = []
 
     var symbol = ["Symbol"]
@@ -75,15 +75,15 @@ export default function ProposalDialog(props) {
     borrowerAddress.push(borrowerAddressCall)
 
     var isaAmount = ["ISA Amount"]
-    isaAmount.push("$" + await instance.methods.isaAmount().call())
+    isaAmount.push(web3Instance.utils.fromWei(await instance.methods.isaAmount().call(), 'ether') + " eth")
     var incomePercentage = ["Income Percentage"]
     incomePercentage.push(await instance.methods.incomePercentage().call() + "%")
     var timePeriod = ["Time Period"]
-    timePeriod.push(await instance.methods.timePeriod().call() + " months")
+    timePeriod.push(await instance.methods.timePeriod().call()/52*12 + " months")
     var minimumIncome = ["Minimum Income"]
-    minimumIncome.push("$" + await instance.methods.minimumIncome().call())
+    minimumIncome.push(web3Instance.utils.fromWei(await instance.methods.minimumIncome().call(), 'ether') + " eth")
     var paymentCap = ["Payment Cap"]
-    paymentCap.push("$" + await instance.methods.minimumIncome().call())
+    paymentCap.push(web3Instance.utils.fromWei(await instance.methods.paymentCap().call(), 'ether') + " eth")
 
     proposalData.push(symbol)
     proposalData.push(lenderAddress)
@@ -113,7 +113,6 @@ export default function ProposalDialog(props) {
     await proposal.methods.reject().send( {from: currentAccount} )
   }
 
-
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <GridContainer>
@@ -122,7 +121,7 @@ export default function ProposalDialog(props) {
             <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>ISA Proposal</h4>
               <p className={classes.cardCategoryWhite}>
-                Here is a detailed description of a ISA proposal you have been included in.
+                Here is a detailed description of an agreed ISA proposal.
               </p>
             </CardHeader>
             <CardBody>
@@ -134,7 +133,7 @@ export default function ProposalDialog(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      <OpenLaw proposal={proposal}/>
+      <ISACreation proposal={proposal}/>
     </Dialog>
   );
 }

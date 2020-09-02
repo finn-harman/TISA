@@ -16,6 +16,8 @@ import { blue } from '@material-ui/core/colors';
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import ProposalDialogTable from "components/ProposalDialogTable/ProposalDialogTable.js";
+import BorrowDialogInfo from "components/BorrowDialogInfo/BorrowDialogInfo";
+import LendDialogInfo from "components/LendDialogInfo/LendDialogInfo";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -23,6 +25,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import CardActions from '@material-ui/core/CardActions';
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import ISATransfer from "components/ISATransfer/ISATransfer.js"
 
 import Web3 from "web3";
 
@@ -35,12 +38,15 @@ const useStyles = makeStyles({
 
 export default function ProposalDialog(props) {
   const classes = useStyles();
-  const { onClose, proposal, pending, open } = props;
+  const { onClose, isa, open } = props;
 
   const [ web3, setWeb3 ] = useState(null);
   const [ accounts, setAccounts ] = useState(null);
   const [ currentAccount, setCurrentAccount ] = useState(null);
-  const [ proposalData, setProposalData ] = useState(null)
+  const [ isaData, setISAData ] = useState(null)
+  const [ requestData, setRequestData ] = useState(null)
+  const [ request, setRequest ] = useState(null)
+  const [ index, setIndex ] = useState(null)
 
   useEffect(() => {
     const init = async() => {
@@ -51,33 +57,25 @@ export default function ProposalDialog(props) {
       setAccounts(accounts)
       setCurrentAccount(accounts[0])
 
-      const propData = await getProposalData(proposal, accounts[0], web3Instance)
-      setProposalData(propData)
+      const requestIsaData = await getISAData(isa, web3Instance)
+      const requestObject = await getRequest(isa, accounts[0], web3Instance)
+      const requestData = await getRequestData(isa, requestObject, web3Instance)
+      setISAData(requestIsaData)
+      setRequest(requestObject)
+      setRequestData(requestData)
     }
 
     init();
   }, []);
 
-  async function getProposalData(instance, account, web3Instance) {
-    var proposalData = []
+  async function getISAData(instance, web3Instance) {
+    var isaData = []
 
     var symbol = ["Symbol"]
     symbol.push(await instance.methods.symbol().call())
 
-    var lenderAddress = ["Lender Address"]
     var borrowerAddress = ["Borrower Address"]
-
-    var lenderAddressCall = await instance.methods.lenderAddress().call()
-    var borrowerAddressCall = await instance.methods.borrowerAddress().call()
-
-    if (lenderAddressCall == account) {
-      lenderAddress.push("You")
-      borrowerAddress.push(borrowerAddressCall)
-    } else {
-      lenderAddress.push(lenderAddressCall)
-      borrowerAddress.push("You")
-    }
-
+    borrowerAddress.push(await instance.methods.borrowerAddress().call())
     var isaAmount = ["ISA Amount"]
     isaAmount.push(web3Instance.utils.fromWei(await instance.methods.isaAmount().call(), 'ether') + " eth")
     var incomePercentage = ["Income Percentage"]
@@ -89,16 +87,50 @@ export default function ProposalDialog(props) {
     var paymentCap = ["Payment Cap"]
     paymentCap.push(web3Instance.utils.fromWei(await instance.methods.paymentCap().call(), 'ether') + " eth")
 
-    proposalData.push(symbol)
-    proposalData.push(lenderAddress)
-    proposalData.push(borrowerAddress)
-    proposalData.push(isaAmount)
-    proposalData.push(incomePercentage)
-    proposalData.push(timePeriod)
-    proposalData.push(minimumIncome)
-    proposalData.push(paymentCap)
+    isaData.push(symbol)
+    isaData.push(borrowerAddress)
+    isaData.push(isaAmount)
+    isaData.push(incomePercentage)
+    isaData.push(timePeriod)
+    isaData.push(minimumIncome)
+    isaData.push(paymentCap)
 
-    return proposalData
+    return isaData
+  }
+
+  async function getRequest(instance, account, web3Instance) {
+    var requestData = []
+    var requestsLength = await instance.methods.getRequestCount().call()
+    for (var j = 0 ; j < requestsLength ; j++) {
+      var request = await instance.methods.requests(j).call()
+      if (request[4]) {
+        setIndex(j)
+        return request
+      }
+    }
+  }
+
+  async function getRequestData(instance, request, web3Instance) {
+    var requestData = []
+
+    var from = ["Seller"]
+    from.push(request[0])
+    var to = ["Buyer"]
+    to.push("You")
+    var tokenAmount = ["Number of Tokens"]
+    tokenAmount.push(request[2])
+    var totalTokens = ["Total Token Supply"]
+    totalTokens.push(await instance.methods.totalSupply().call())
+    var price = ["Price"]
+    price.push(web3Instance.utils.fromWei(request[3], 'ether') + " eth")
+
+    requestData.push(from)
+    requestData.push(to)
+    requestData.push(tokenAmount)
+    requestData.push(totalTokens)
+    requestData.push(price)
+
+    return requestData
   }
 
   const handleClose = () => {
@@ -110,11 +142,13 @@ export default function ProposalDialog(props) {
   };
 
   const acceptProposal = async () => {
-    await proposal.methods.agree().send( {from: currentAccount} )
+    await isa.methods.agree(index).send({from: currentAccount})
+    var request = await getRequest(isa, currentAccount, web3)
+    console.log("agreed: " + request[4])
   }
 
   const rejectProposal = async () => {
-    await proposal.methods.reject().send( {from: currentAccount} )
+    console.log("hello")
   }
 
   return (
@@ -122,39 +156,40 @@ export default function ProposalDialog(props) {
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-            {pending === true ? (
             <CardHeader color="info">
-              <h4 className={classes.cardTitleWhite}>Pending ISA Proposal</h4>
+              <h4 className={classes.cardTitleWhite}>ISA Details</h4>
               <p className={classes.cardCategoryWhite}>
-                Here is a detailed description of a pending ISA proposal you have been included in.
-                If you agree to the terms of this ISA, please click accept. Once both parties have
-                clicked confirm, you will both be sent a legal contract to sign at which point the
-                ISA will be created.
+                Here is a detailed description of an ISA involved in a transfer.
               </p>
             </CardHeader>
-            ) : (
-              <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Signed ISA Proposal</h4>
-                <p className={classes.cardCategoryWhite}>
-                  Here is a detailed description of an agreed ISA proposal you have been included in.
-                </p>
-              </CardHeader>
-            )}
             <CardBody>
               <ProposalDialogTable
                 tableHeaderColor="info"
-                tableData={proposalData}
+                tableData={isaData}
               />
             </CardBody>
-            {pending === true ? (
-            <CardActions>
-              <Button onClick={acceptProposal} color="success">Accept</Button>
-              <Button onClick={rejectProposal} color="danger">Reject</Button>
-            </CardActions>
-            ) : null}
           </Card>
         </GridItem>
       </GridContainer>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            <CardHeader color="info">
+              <h4 className={classes.cardTitleWhite}>Transfer Details</h4>
+              <p className={classes.cardCategoryWhite}>
+                Here are the details of the ISA transfer.
+              </p>
+            </CardHeader>
+            <CardBody>
+              <ProposalDialogTable
+                tableHeaderColor="info"
+                tableData={requestData}
+              />
+            </CardBody>
+          </Card>
+        </GridItem>
+      </GridContainer>
+      <ISATransfer isa={isa} request={request}/>
     </Dialog>
   );
 }

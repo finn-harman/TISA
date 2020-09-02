@@ -80,31 +80,35 @@ export default function NewProposal() {
     init();
   }, []);
 
+  const [ symbol, setSymbol ] = useState("ABC");
   const [ lenderAddress, setLenderAddress ] = useState("0x1d11E4335012202E17adf951155F78dEEBBFDCa4")
   const [ borrowerAddress, setBorrowerAddress ] = useState("0x7C930023700702CdF3c4C22E33b705C92fd08AC3")
-  const [ isaAmount, setIsaAmount ] = useState(100000)
+  const [ isaAmount, setIsaAmount ] = useState("1")
   const [ incomePercentage, setIncomePercentage ] = useState(30)
-  const [ timePeriod, setTimePeriod ] = useState(18)
-  const [ buyoutAmount, setBuyoutAmount ] = useState(30000)
-  const [ minimumIncome, setMinimumIncome ] = useState(50000)
-  const [ paymentCap, setPaymentCap ] = useState(30000)
+  const [ timePeriod, setTimePeriod ] = useState(1.5)
+  const [ minimumIncome, setMinimumIncome ] = useState("5")
+  const [ paymentCap, setPaymentCap ] = useState("50")
 
   const registerDetails = async () => {
-    if (!lenderAddress || !borrowerAddress || !isaAmount || !incomePercentage || !timePeriod || !buyoutAmount || !minimumIncome || !paymentCap) {
+    if (!symbol || !lenderAddress || !borrowerAddress || !isaAmount || !incomePercentage || !timePeriod || !minimumIncome || !paymentCap) {
       alert("Error: All fields must be completed");
     } else {
+      console.log("symbol: " + symbol)
       console.log("lender address: " + lenderAddress)
       console.log("borrower address: " + borrowerAddress)
-      console.log("ISA amount: " + isaAmount)
+      var isaAmountWei = await web3.utils.toWei(isaAmount, 'ether')
+      console.log("ISA amount (wei): " + isaAmountWei)
       console.log("Income percentage: " + incomePercentage)
-      console.log("Time period: " + timePeriod)
-      console.log("buyout amount: " + buyoutAmount)
-      console.log("minimumIncome: " + minimumIncome)
-      console.log("payment cap: " + paymentCap)
+      var timePeriodWeeks = timePeriod * 52
+      console.log("Time period (weeks): " + timePeriodWeeks)
+      var minimumIncomeWei = await web3.utils.toWei(minimumIncome, 'ether')
+      console.log("minimumIncome (wei): " + minimumIncomeWei)
+      var paymentCapWei = await web3.utils.toWei(paymentCap, 'ether')
+      console.log("payment cap (wei): " + paymentCapWei)
 
       const proposal = await contract.methods.newProposal(lenderAddress, borrowerAddress,
-        isaAmount, incomePercentage, timePeriod, buyoutAmount, minimumIncome,
-        paymentCap
+        isaAmountWei, incomePercentage, timePeriodWeeks, minimumIncomeWei,
+        paymentCapWei, symbol
       ).send( {from: currentAccount} )
       console.log(proposal)
     }
@@ -113,15 +117,28 @@ export default function NewProposal() {
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>New Proposal</h4>
-              <p className={classes.cardCategoryWhite}>Enter the details of a new ISA proposal in which you are the lender.</p>
+              <p className={classes.cardCategoryWhite}>Enter the details of a new ISA proposal.</p>
             </CardHeader>
             <CardBody>
             <GridContainer>
-              <GridItem xs={12} sm={12} md={6}
+              <GridItem xs={12} sm={12} md={12}
+                onChange={(e) => setSymbol(e.target.value)}
+                >
+                <CustomInput
+                  labelText="Symbol"
+                  id="symbol"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                />
+              </GridItem>
+            </GridContainer>
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={12}
                 onChange={(e) => setLenderAddress(e.target.value)}
                 >
                 <CustomInput
@@ -134,7 +151,7 @@ export default function NewProposal() {
               </GridItem>
             </GridContainer>
             <GridContainer>
-              <GridItem xs={12} sm={12} md={6}
+              <GridItem xs={12} sm={12} md={12}
                 onChange={(e) => setBorrowerAddress(e.target.value)}
                 >
                 <CustomInput
@@ -147,11 +164,11 @@ export default function NewProposal() {
               </GridItem>
             </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setIsaAmount(parseInt(e.target.value, 10))}
+                <GridItem xs={12} sm={12} md={12}
+                  onChange={(e) => setIsaAmount(e.target.value)}
                   >
                   <CustomInput
-                    labelText="ISA Amount (ether)"
+                    labelText="ISA Amount (eth)"
                     id="isa-amount"
                     formControlProps={{
                       fullWidth: true
@@ -160,11 +177,11 @@ export default function NewProposal() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setIncomePercentage(parseInt(e.target.value, 10))}
+                <GridItem xs={12} sm={12} md={12}
+                  onChange={(e) => setIncomePercentage(e.target.value)}
                   >
                   <CustomInput
-                    labelText="Income Percentage"
+                    labelText="Income Percentage (%)"
                     id="income-percentage"
                     formControlProps={{
                       fullWidth: true
@@ -173,11 +190,11 @@ export default function NewProposal() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setTimePeriod(parseInt(e.target.value,10))}
+                <GridItem xs={12} sm={12} md={12}
+                  onChange={(e) => setTimePeriod(e.target.value)}
                   >
                   <CustomInput
-                    labelText="ISA Time Period (Months)"
+                    labelText="ISA Time Period (years)"
                     id="isa-time-period"
                     formControlProps={{
                       fullWidth: true
@@ -186,24 +203,11 @@ export default function NewProposal() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setBuyoutAmount(parseInt(e.target.value,10))}
+                <GridItem xs={12} sm={12} md={12}
+                  onChange={(e) => setMinimumIncome(e.target.value)}
                   >
                   <CustomInput
-                    labelText="Buyout Multiplier"
-                    id="buyout-multiplier"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setMinimumIncome(parseInt(e.target.value,10))}
-                  >
-                  <CustomInput
-                    labelText="Minimum Income ($)"
+                    labelText="Minimum Monthly Income (eth)"
                     id="minimum-income"
                     formControlProps={{
                       fullWidth: true
@@ -212,11 +216,11 @@ export default function NewProposal() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
-                  onChange={(e) => setPaymentCap(parseInt(e.target.value,10))}
+                <GridItem xs={12} sm={12} md={12}
+                  onChange={(e) => setPaymentCap(e.target.value)}
                   >
                   <CustomInput
-                    labelText="Payment Cap ($)"
+                    labelText="Monthly Payment Cap (eth)"
                     id="payment-cap"
                     formControlProps={{
                       fullWidth: true

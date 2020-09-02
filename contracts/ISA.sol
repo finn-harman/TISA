@@ -10,9 +10,9 @@ import "./Regulator.sol";
 contract ISA is IERC20, Ownable {
   using SafeMath for uint256;
 
-  uint256 private totalSupply;
-  string private symbol;
+  uint256 private _totalSupply;
 
+  string public symbol;
   address payable public initialLenderAddress;
   address payable public borrowerAddress;
   uint256 public isaAmount;
@@ -30,15 +30,14 @@ contract ISA is IERC20, Ownable {
 
   mapping (address => uint256) private _balances;
   mapping (address => mapping (address => uint256)) private _allowances;
-  address[] owners;
-  Request[] requests;
+  address payable[] public lenders;
+  Request[] public requests;
 
   Regulator private regulator;
 
   event ISAStarted(address lenderAddress, address borrowerAddress,
     uint256 isaAmount, uint256 incomePercentage, uint256 timePeriod,
     uint256 minimumIncome, uint256 paymentCap, string symbol);
-  event
 
   /**
    * @dev Sets the value for {symbol}, initializes {_totalSupply} with
@@ -48,15 +47,15 @@ contract ISA is IERC20, Ownable {
    * construction.
    */
   constructor(
-    address _lenderAddress,
-    address _borrowerAddress,
+    address payable _lenderAddress,
+    address payable _borrowerAddress,
     uint256 _isaAmount,
     uint256 _incomePercentage,
     uint256 _timePeriod,
     uint256 _minimumIncome,
     uint256 _paymentCap,
     string memory _symbol,
-    Regulator _regulator)
+    Regulator _regulator
   )
     public
   {
@@ -70,7 +69,7 @@ contract ISA is IERC20, Ownable {
     require(_paymentCap > 0);
     require(_paymentCap > _minimumIncome);
 
-    initiallenderAddress = _lenderAddress;
+    initialLenderAddress = _lenderAddress;
     borrowerAddress = _borrowerAddress;
     isaAmount = _isaAmount;
     incomePercentage = _incomePercentage;
@@ -80,14 +79,28 @@ contract ISA is IERC20, Ownable {
     symbol = _symbol;
     regulator = _regulator;
 
-    totalSupply = 100;
+    lenders.push(initialLenderAddress);
+    _totalSupply = 100;
+    totalPaid = 0;
     signed = false;
     started = false;
     ended = false;
   }
 
-  function sign() public {
-    signed = true;
+  function isLender(address payable account) public view returns(bool) {
+    for (uint256 i = 0 ; i < lenders.length ; i++) {
+      if (lenders[i] == account) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function isBorrower(address account) public view returns(bool) {
+    if (borrowerAddress == account) {
+      return true;
+    }
+    return false;
   }
 
   function startISA() public payable {
@@ -96,26 +109,30 @@ contract ISA is IERC20, Ownable {
     require(msg.value == isaAmount, "ISA must be funded");
     require(signed == true, "legal contract must be signed");
 
-    _balance[initialLenderAddress] = totalSupply;
-    owners.push(initialLenderAddress);
+    _balances[initialLenderAddress] = _totalSupply;
     started = true;
     startTime = now;
-    endTime = now.add(timePeriod * 1 week);
+    endTime = now.add(timePeriod * 1 weeks);
 
-    address(borrowerAddress).transfer(msg.value);
+    borrowerAddress.transfer(msg.value);
   }
 
   function payIncome() public payable notEnded {
     require(msg.sender == borrowerAddress, "only borrower can pay into ISA");
     require(address(this).balance == msg.value, "transfer must fund ISA");
-    require(msg.value >= minimumIncome);
-    require(msg.value <= paymentCap);
+    require(msg.value >= minimumIncome.mul(incomePercentage).div(100), "income must be greater than minimum income");
     require(started == true, "ISA must have started");
 
-    totalPaid.add(msg.value);
-    for (uint256 i = 0 ; i < owners.length ; i++) {
-      uint256 amount = msg.value / _balances[owners[i]];
-      address(owners[i]).transfer(amount));
+    uint256 value = msg.value;
+    if (value > paymentCap.mul(incomePercentage).div(100)) {
+      value = paymentCap;
+    }
+
+    totalPaid = totalPaid.add(msg.value);
+
+    for (uint256 i = 0 ; i < lenders.length ; i++) {
+      uint256 amount = value.mul(_balances[lenders[i]]).div(_totalSupply);
+      lenders[i].transfer(amount);
     }
   }
 
@@ -124,22 +141,29 @@ contract ISA is IERC20, Ownable {
     require(msg.value == buyoutAmount(), "transfer must fund buyout");
     require(address(this).balance == msg.value, "transfer must fund buyout");
 
-    for (uint256 i = 0 ; i < owners.length ; i++) {
-      _balances[owners[i]] = 0;
-    }
-    totalPaid.add(msg.value);
+
+    totalPaid = totalPaid.add(msg.value);
     ended = true;
 
-    address(lenderAddress).transfer(msg.value);
+    for (uint256 i = 0 ; i < lenders.length ; i++) {
+      _balances[lenders[i]] = 0;
+      uint256 amount = msg.value.div(_balances[lenders[i]]).mul(_totalSupply);
+      lenders[i].transfer(amount);
+    }
   }
 
-  function buyoutAmount() public view return (uint256) notEnded {
-    uint256 weeksLeft = timeLeft().div(1 week) + 1;
-    uint256 buyoutAmount = paymentCap * weeksLeft;
+  function buyoutAmount() public view notEnded returns (uint256)  {
+    uint256 weeksLeft = (timeLeft().div(1 weeks)).add(1);
+    uint256 amount = paymentCap * weeksLeft;
+    return amount;
   }
 
-  function timeLeft() internal view returns (uint256) notEnded {
+  function timeLeft() public view notEnded returns (uint256)  {
     return endTime - now;
+  }
+
+  function sign() public {
+    signed = true;
   }
 
   modifier notEnded {
@@ -151,6 +175,15 @@ contract ISA is IERC20, Ownable {
     require (msg.sender == regulator.owner(), "Only Regulator can call this function");
     _;
   }
+
+  /**
+  * @dev Returns total supply of tokens
+  */
+  function totalSupply() public view override returns (uint256) {
+    return _totalSupply;
+  }
+
+
   /**
    * @dev Returns the amount of tokens owned by `account`.
    */
@@ -159,34 +192,64 @@ contract ISA is IERC20, Ownable {
   }
 
   struct Request {
-    address from;
+    address payable from;
     address to;
     uint256 tokenAmount;
     uint256 etherAmount;
-    bool completed = false;
-    bool signed = false;
+    bool agreed;
+    bool signed;
+    bool completed;
   }
 
-  function requestTransfer(address recipient, uint256 tokenAmount, uint256 etherAmount) external {
+  function getRequestCount() external view returns (uint256) {
+    return requests.length;
+  }
 
+  function agree(uint256 index) external {
+    requests[index].agreed = true;
+  }
 
+  function sign(uint256 index) external {
+    requests[index].signed = true;
+  }
+
+  function complete(uint256 index) external {
+    requests[index].completed = true;
+  }
+
+  modifier notRestricted(address from, address to, uint256 value) {
+    uint8 restrictionCode = detectTransferRestriction(from, to, value);
+    require(restrictionCode == 0, messageForTransferRestriction(restrictionCode));
+    _;
+  }
+
+  function requestTransfer(address recipient, uint256 tokenAmount, uint256 etherAmount)
+    external
+    notEnded
+    notRestricted(msg.sender, recipient, tokenAmount)
+  {
     Request memory newRequest;
     newRequest.from = msg.sender;
     newRequest.to = recipient;
     newRequest.tokenAmount = tokenAmount;
     newRequest.etherAmount = etherAmount;
+    newRequest.agreed = false;
+    newRequest.signed = false;
+    newRequest.completed = false;
 
     requests.push(newRequest);
   }
 
-  function confirmTransfer(Request request) public payable {
-    require(msg.sender == request.to);
-    require(msg.value == request.etherAmount, "transfer must be funded");
+  function confirmTransfer(address to, address payable from, uint256 tokenAmount, uint256 etherAmount) public payable notEnded {
+    require(msg.sender == to);
+    require(msg.value == etherAmount, "transfer must be funded");
     require(address(this).balance == msg.value, "transfer must be funded");
 
-    _balances[msg.sender].add(request.tokenAmount);
-    _balances[request.from].sub(request.tokenAmount);
-    address(request.from).transfer(msg.value);
+    _balances[to] = _balances[to].add(tokenAmount);
+    _balances[from] = _balances[from].sub(tokenAmount);
+
+    lenders.push(msg.sender)
+    from.transfer(msg.value);
   }
 
   /**
@@ -197,6 +260,11 @@ contract ISA is IERC20, Ownable {
    * Emits a {Transfer} event.
    */
   function transfer(address recipient, uint256 amount) external override returns (bool) {
+    _balances[recipient] = _balances[recipient].add(amount);
+    _balances[msg.sender] = _balances[msg.sender].sub(amount);
+
+    emit Transfer(msg.sender, recipient, amount);
+
     return true;
   }
 
@@ -249,17 +317,17 @@ contract ISA is IERC20, Ownable {
   /// @return Code by which to reference message for rejection reasoning
   /// @dev Overwrite with your custom transfer restriction logic
   function detectTransferRestriction (address from, address to, uint256 value) public view returns (uint8) {
-    uint8 value = 0;
-    if (_balances[msg.sender] < tokenAmount) {
-      value = 1;
+    uint8 restrictionCode = 0;
+    if (_balances[msg.sender] < value) {
+      restrictionCode = 1;
     }
-    if (tokenAmount <= 0) {
-      value = 2;
+    if (value <= 0) {
+      restrictionCode = 2;
     }
-    if (!regulator.getConfirmedAddress(recipient)) {
-      value = 3;
+    if (!regulator.getConfirmedAddress(to)) {
+      restrictionCode = 3;
     }
-    return value;
+    return restrictionCode;
   }
 
   /// @notice Returns a human-readable message for a given restriction code
@@ -267,6 +335,12 @@ contract ISA is IERC20, Ownable {
   /// @return Text showing the restriction's reasoning
   /// @dev Overwrite with your custom message and restrictionCode handling
   function messageForTransferRestriction (uint8 restrictionCode) public view returns (string memory) {
-    return "test";
+    if (restrictionCode == 1) {
+      return "Token senders balance is too low";
+    } else if (restrictionCode == 2) {
+      return "Number of tokens to transfer must be greater than 0";
+    } else {
+      return "Address tokens are transferred to must be registered with Regulator";
+    }
   }
 }

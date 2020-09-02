@@ -9,6 +9,7 @@ import Store from "@material-ui/icons/Store";
 import CheckIcon from '@material-ui/icons/Check';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import LockOpen from "@material-ui/icons/LockOpen";
 import DateRange from "@material-ui/icons/DateRange";
 import LocalOffer from "@material-ui/icons/LocalOffer";
@@ -25,6 +26,8 @@ import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
 import ProposalTable from "components/ProposalTable/ProposalTable.js";
+import TransferTable from "components/TransferTable/TransferTable.js"
+import ISATable from "components/ISATable/ISATable.js";
 import Tasks from "components/Tasks/Tasks.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import Danger from "components/Typography/Danger.js";
@@ -39,7 +42,6 @@ import getWeb3 from "../../utils/getWeb3";
 import Web3 from "web3";
 import RegulatorContract from "../../contracts/Regulator.json";
 import ISAFactoryContract from "../../contracts/ISAFactory.json";
-import ProposalContract from "../../contracts/Proposal.json";
 
 import { bugs, website, server } from "variables/general.js";
 
@@ -87,7 +89,7 @@ export default function Dashboard() {
         setIsaFactoryContract(isaFactoryInstance)
         setAccounts(accounts)
         setCurrentAccount(accounts[0])
-        const registered = await regulatorInstance.methods.getConfirmedIdentity().call( {from: accounts[0] })
+        const registered = await regulatorInstance.methods.getConfirmedAddress(accounts[0]).call( {from: accounts[0] })
         setIsRegistered(registered)
 
         console.log("currentAccount: " + accounts[0], "registered? " + registered)
@@ -155,7 +157,7 @@ export default function Dashboard() {
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={9}>
+        <GridItem xs={12} sm={12} md={12}>
           <Registered />
         </GridItem>
       </GridContainer>
@@ -199,14 +201,15 @@ export default function Dashboard() {
             title="Income Sharing Agreements:"
             headerColor="info"
             tabs={[
-              /*{
+              {
                 tabName: "Borrower",
                 tabIcon: ArrowUpwardIcon,
                 tabContent: (
-                  <ProposalTable
+                  <ISATable
                     tableHeaderColor="info"
-                    tableHead={["ID", "Address", "Amount", "Percentage", "Total Paid"]}
+                    tableHead={["Symbol", "ISA Amount", "Income Percentage", "ISA Period"]}
                     isRegistered={isRegistered}
+                    borrow={true}
                   />
                 )
               },
@@ -214,13 +217,25 @@ export default function Dashboard() {
                 tabName: "Lender",
                 tabIcon: ArrowDownwardIcon,
                 tabContent: (
-                  <ProposalTable
+                  <ISATable
                     tableHeaderColor="info"
-                    tableHead={["ID", "Address", "Amount", "Percentage", "Total Paid"]}
+                    tableHead={["Symbol", "ISA Amount", "Income Percentage", "ISA Period"]}
+                    isRegistered={isRegistered}
+                    borrow={false}
+                  />
+                )
+              },
+              {
+                tabName: "Transfers",
+                tabIcon: ArrowForwardIcon,
+                tabContent: (
+                  <TransferTable
+                    tableHeaderColor="info"
+                    tableHead={["Symbol", "Seller", "Tokens", "Cost"]}
                     isRegistered={isRegistered}
                   />
                 )
-              },*/
+              },
             ]}
           />
         </GridItem>

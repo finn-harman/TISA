@@ -68,13 +68,13 @@ export default function ProposalTable(props) {
         setSignedProposals(signedProp)
 
         if (pendingProp.length > 0) {
-          const pendingPropData = await getProposalDataFromProposalContracts(pendingProp, accounts[0])
+          const pendingPropData = await getProposalDataFromProposalContracts(pendingProp, accounts[0], web3Instance)
           console.log("Pending proposal data: "+ pendingPropData)
           setPendingProposalsData(pendingPropData)
         }
 
         if (signedProp.length > 0) {
-          const signedPropData = await getProposalDataFromProposalContracts(signedProp, accounts[0])
+          const signedPropData = await getProposalDataFromProposalContracts(signedProp, accounts[0], web3Instance)
           console.log("Signed proposal data: "+ signedPropData)
           setSignedProposalsData(signedPropData)
         }
@@ -138,14 +138,14 @@ export default function ProposalTable(props) {
         proposals[i]
       );
 
-      if (await instance.methods.isSigned().call( {from: account})) {
+      if (await instance.methods.isSigned().call( {from: account}) && !await instance.methods.expired().call( {from: account})) {
         signedProposals.push(instance)
       }
     }
     return signedProposals
   }
 
-  async function getProposalDataFromProposalContracts(proposals, account) {
+  async function getProposalDataFromProposalContracts(proposals, account, web3Instance) {
     var allProposalData = []
     for (var i = 0 ; i < proposals.length ; i++) {
       var instance = proposals[i]
@@ -164,9 +164,10 @@ export default function ProposalTable(props) {
         proposalData.push("You")
       }
 
-      proposalData.push("$" + await instance.methods.isaAmount().call())
+      proposalData.push(web3Instance.utils.fromWei(await instance.methods.isaAmount().call(), 'ether') + " eth")
+
       proposalData.push(await instance.methods.incomePercentage().call() + "%")
-      proposalData.push(await instance.methods.timePeriod().call() + " months")
+      proposalData.push(await instance.methods.timePeriod().call()/52*12 + " months")
 
       allProposalData.push(proposalData)
     }

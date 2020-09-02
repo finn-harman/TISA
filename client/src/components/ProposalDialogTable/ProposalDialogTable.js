@@ -21,18 +21,6 @@ const useStyles = makeStyles(styles);
 export default function ProposalDialogTable(props) {
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState("user1@gmail.com");
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
-
   const { tableHeaderColor, tableHead, tableData } = props;
   return (
     <div className={classes.tableResponsive}>

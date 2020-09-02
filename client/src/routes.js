@@ -22,6 +22,9 @@ import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
+import AddIcon from '@material-ui/icons/Add';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import SecurityIcon from '@material-ui/icons/Security';
 // core components/views for Admin layout
 import UserDashboard from "views/UserDashboard/UserDashboard.js";
 import Register from "views/Register/Register.js";
@@ -48,7 +51,7 @@ const dashboardRoutes = [
     path: "/Register",
     name: "Register",
     rtlName: "لوحة القيادة",
-    icon: Person,
+    icon: LockOpenIcon,
     component: Register,
     layout: "/admin"
   },
@@ -56,7 +59,7 @@ const dashboardRoutes = [
     path: "/NewProposal",
     name: "New Proposal",
     rtlName: "لوحة القيادة",
-    icon: Person,
+    icon: AddIcon,
     component: NewProposal,
     layout: "/admin"
   },
@@ -64,7 +67,7 @@ const dashboardRoutes = [
     path: "/Regulator",
     name: "Regulator",
     rtlName: "لوحة القيادة",
-    icon: Person,
+    icon: SecurityIcon,
     component: Regulator,
     layout: "/admin"
   },

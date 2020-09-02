@@ -85,11 +85,6 @@ export default function Register() {
   const [ nationalInsurance, setNationalInsurance ] = useState("12345678")
   const [ email, setEmail ] = useState("joebloggs@gmail.com")
 
-  // const [ name, setName ] = useState(null)
-  // const [ postCode, setPostCode ] = useState(null)
-  // const [ nationalInsurance, setNationalInsurance ] = useState(null)
-  // const [ email, setEmail ] = useState(null)
-
   const registerDetails = async () => {
     if (!name || !postCode || !nationalInsurance || !email) {
       alert("Error: All fields must be completed");
@@ -118,15 +113,17 @@ export default function Register() {
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>Register</h4>
-              <p className={classes.cardCategoryWhite}>Enter your personal details to connect your real life identity to your Ethereum address</p>
+              <p className={classes.cardCategoryWhite}>Enter your personal
+              details to connect your real life identity to your Ethereum
+              address while maintaining your privacy</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
+                <GridItem xs={12} sm={12} md={12}
                   onChange={(e) => setName(e.target.value)}
                   >
                   <CustomInput
@@ -139,7 +136,7 @@ export default function Register() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
+                <GridItem xs={12} sm={12} md={12}
                   onChange={(e) => setPostCode(e.target.value)}
                   >
                   <CustomInput
@@ -152,7 +149,7 @@ export default function Register() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
+                <GridItem xs={12} sm={12} md={12}
                   onChange={(e) => setNationalInsurance(e.target.value)}
                   >
                   <CustomInput
@@ -165,7 +162,7 @@ export default function Register() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={6}
+                <GridItem xs={12} sm={12} md={12}
                   onChange={(e) => setEmail(e.target.value)}
                   >
                   <CustomInput

@@ -21,6 +21,7 @@ contract Proposal {
   bool public borrowerAgree;
   bool public bothAgree;
   bool public rejected;
+  bool public expired;
 
   constructor(
     address _lenderAddress,
@@ -28,7 +29,6 @@ contract Proposal {
     uint256 _isaAmount,
     uint256 _incomePercentage,
     uint256 _timePeriod,
-    uint256 _buyoutAmount,
     uint256 _minimumIncome,
     uint256 _paymentCap,
     string memory _symbol,
@@ -36,15 +36,15 @@ contract Proposal {
   )
     public
   {
-    require(_regulator.getConfirmedAddress(_lenderAddress));
-    require(_regulator.getConfirmedAddress(_borrowerAddress));
-    require(_isaAmount > 0);
-    require(_incomePercentage >= 0);
-    require(_incomePercentage <= 100);
-    require(_timePeriod > 0);
-    require(_minimumIncome > 0);
-    require(_paymentCap > 0);
-    require(_paymentCap > _minimumIncome);
+    require(_isaAmount > 0, "ISA must have value");
+    require(_incomePercentage > 0, "Income percentage must be between 0 and 50");
+    require(_incomePercentage < 50, "Income percentage must be between 0 and 50");
+    require(_timePeriod > 0, "Time period must be positive");
+    require(_minimumIncome >= 4.2 ether, "Minimum income must be greater than 4.2 eth");
+    require(_paymentCap > 0, "Payment cap must be positive");
+    require(_paymentCap > _minimumIncome, "Payment cap must be greater than minimum income");
+    require(_regulator.getConfirmedAddress(_lenderAddress), "lender must be registered");
+    require(_regulator.getConfirmedAddress(_borrowerAddress), "borrower must be registered");
 
     lenderAddress = _lenderAddress;
     borrowerAddress = _borrowerAddress;
@@ -76,7 +76,7 @@ contract Proposal {
 
   function reject() external {
     require(msg.sender == lenderAddress || msg.sender == borrowerAddress);
-    rejected == true;
+    rejected = true;
   }
 
   function isPending() external view returns (bool) {
@@ -97,5 +97,10 @@ contract Proposal {
       return true;
     }
     return false;
+  }
+
+  function expire() external {
+    require(msg.sender == regulator.owner());
+    expired = true;
   }
 }
