@@ -2,7 +2,7 @@
 // =============================================================================
 // Connect to database
 var mongoose = require('mongoose')
-const uri = 'mongodb+srv://admin:Imperial123@cluster0.9p1dp.mongodb.net/RegulatorRegistry?retryWrites=true&w=majority'
+const uri = #enter connection url
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 const connection = mongoose.connection
 var Identity = require('./src/utils/identity')
