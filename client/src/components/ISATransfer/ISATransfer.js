@@ -20,8 +20,8 @@ import Web3 from "web3";
      //PLEASE SUPPLY YOUR OWN LOGIN CREDENTIALS and TEMPLATE NAME FOR OPENLAW
     const URL = "https://lib.openlaw.io/api/v1/default";  //url for your openlaw instance eg. "http://lib.openlaw.io"
     const TEMPLATE_NAME = "Income Sharing Agreement Transfer - TISA"; //name of template stored on Openlaw
-    const OPENLAW_USER = 'finnharman@gmail.com'; //add your Openlaw login email
-    const OPENLAW_PASSWORD = '47MhWS2E@FypaaW' //add your Openlaw password
+    const OPENLAW_USER = //add your Openlaw login email
+    const OPENLAW_PASSWORD = //add your Openlaw password
     //create config
     const openLawConfig = {
       server:URL,
