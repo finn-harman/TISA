@@ -1,7 +1,5 @@
 # TISA
 
-# WörglCoin
-
 TISA is a proof of concept Income Sharing Agreement platform using the Ethereum network.
 
 ## Getting Started
