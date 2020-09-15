@@ -48,4 +48,4 @@ See also the list of [contributors](https://github.com/finn-harman/TISA/contribu
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/matthewsmorrison/Worgl-Coin/blob/master/LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/finn-harman/TISA/blob/master/LICENSE) file for details
